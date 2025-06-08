@@ -1,16 +1,69 @@
 package com.umbell.controller;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
-public class MainController {
+public class MainController implements Initializable {
 
     @FXML
-    private Button primaryButton;
+    private VBox vbox;
+    private Parent fxml;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        TranslateTransition t = new TranslateTransition(Duration.seconds(1), vbox);
+        t.setToX(vbox.getLayoutX() * 20);
+        t.play();
+        t.setOnFinished((e) -> {
+            try {
+                fxml = FXMLLoader.load(getClass().getResource("/fxml/SignIn.fxml"));
+                vbox.getChildren().removeAll();
+                vbox.getChildren().setAll(fxml);
+            } catch (IOException ex) {
+                //ex.printStackTrace();
+            }
+        });
+    }
 
     @FXML
-    private void printHello() throws IOException {
-        System.out.println("Hello");
+    private void openSignIn(ActionEvent event) {
+        TranslateTransition t = new TranslateTransition(Duration.seconds(1), vbox);
+        t.setToX(vbox.getLayoutX() * 20);
+        t.play();
+        t.setOnFinished((e) -> {
+            try {
+                fxml = FXMLLoader.load(getClass().getResource("/fxml/SignIn.fxml"));
+                vbox.getChildren().removeAll();
+                vbox.getChildren().setAll(fxml);
+            } catch (IOException ex) {
+                //ex.printStackTrace();
+            }
+        });
+    }
+
+    @FXML
+    private void openSignUp(ActionEvent event) {
+        TranslateTransition t = new TranslateTransition(Duration.seconds(1), vbox);
+        t.setToX(0);
+        t.play();
+        t.setOnFinished((e) -> {
+            try {
+                fxml = FXMLLoader.load(getClass().getResource("/fxml/SignUp.fxml"));
+                vbox.getChildren().removeAll();
+                vbox.getChildren().setAll(fxml);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 }
