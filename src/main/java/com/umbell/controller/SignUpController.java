@@ -145,7 +145,6 @@ public class SignUpController implements Initializable {
             return;
         }
 
-        // Aqui você pode adicionar a lógica de criação de conta
         System.out.println("Conta criada com sucesso!");
     }
 } 
