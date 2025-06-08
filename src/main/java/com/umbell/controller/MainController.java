@@ -30,7 +30,7 @@ public class MainController implements Initializable {
                 vbox.getChildren().removeAll();
                 vbox.getChildren().setAll(fxml);
             } catch (IOException ex) {
-                //ex.printStackTrace();
+                ex.printStackTrace();
             }
         });
     }
@@ -46,7 +46,7 @@ public class MainController implements Initializable {
                 vbox.getChildren().removeAll();
                 vbox.getChildren().setAll(fxml);
             } catch (IOException ex) {
-                //ex.printStackTrace();
+                ex.printStackTrace();
             }
         });
     }
