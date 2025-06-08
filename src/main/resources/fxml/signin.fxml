@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="white-pane" stylesheets="@../css/signin.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="entrar" textFill="#3bc6049e">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+         <children>
+            <TextField promptText="Email" styleClass="tf_box" stylesheets="@../css/signin.css" HBox.hgrow="ALWAYS" />
+            <FontAwesomeIconView glyphName="USER" size="1.3em" />
+         </children>
+         <VBox.margin>
+            <Insets right="15.0" top="15.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+         <children>
+            <TextField promptText="Senha" styleClass="tf_box" stylesheets="@../css/signin.css" HBox.hgrow="ALWAYS" />
+            <FontAwesomeIconView glyphName="LOCK" size="1.3em" />
+         </children>
+         <VBox.margin>
+            <Insets right="15.0" top="20.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets left="20.0" />
+   </padding>
+</VBox>

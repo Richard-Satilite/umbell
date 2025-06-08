@@ -1,0 +1,20 @@
+.white-pane{
+    -fx-background-color: #fafffd;
+}
+
+.tf_box{
+    -fx-background-color: #fafffd;
+    -fx-border-color: #dedee4;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-radius: 0;
+}
+
+.tf{
+    -fx-background-color: transparent;
+}
+
+.green-btn{
+    -fx-background-color: #2d9404;
+    -fx-background-radius: 5px;
+    -fx-text-fill: #ffffff;
+}
