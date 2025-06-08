@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,13 +26,7 @@ public class MainController implements Initializable {
         t.setToX(vbox.getLayoutX() * 20);
         t.play();
         t.setOnFinished((e) -> {
-            try {
-                fxml = FXMLLoader.load(getClass().getResource("/fxml/SignIn.fxml"));
-                vbox.getChildren().removeAll();
-                vbox.getChildren().setAll(fxml);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            loadFXMLWithFade("/fxml/SignIn.fxml");
         });
     }
 
@@ -41,13 +36,7 @@ public class MainController implements Initializable {
         t.setToX(vbox.getLayoutX() * 20);
         t.play();
         t.setOnFinished((e) -> {
-            try {
-                fxml = FXMLLoader.load(getClass().getResource("/fxml/SignIn.fxml"));
-                vbox.getChildren().removeAll();
-                vbox.getChildren().setAll(fxml);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            loadFXMLWithFade("/fxml/SignIn.fxml");
         });
     }
 
@@ -57,13 +46,25 @@ public class MainController implements Initializable {
         t.setToX(0);
         t.play();
         t.setOnFinished((e) -> {
-            try {
-                fxml = FXMLLoader.load(getClass().getResource("/fxml/SignUp.fxml"));
-                vbox.getChildren().removeAll();
-                vbox.getChildren().setAll(fxml);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            loadFXMLWithFade("/fxml/SignUp.fxml");
         });
+    }
+
+    private void loadFXMLWithFade(String fxmlPath) {
+        try {
+            fxml = FXMLLoader.load(getClass().getResource(fxmlPath));
+
+            fxml.setOpacity(0);
+
+            vbox.getChildren().setAll(fxml);
+
+            FadeTransition fade = new FadeTransition(Duration.millis(500), fxml);
+            fade.setFromValue(0.0);
+            fade.setToValue(1.0);
+            fade.play();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
