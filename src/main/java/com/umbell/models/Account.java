@@ -9,7 +9,7 @@ public class Account {
     private String userEmail;
     private LocalDateTime createdAt;
 
-    public Account() {
+    public Account() {  
         this.totalBalance = BigDecimal.ZERO;
         this.createdAt = LocalDateTime.now();
     }

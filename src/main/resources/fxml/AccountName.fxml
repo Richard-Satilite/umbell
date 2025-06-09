@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.umbell.controller.AccountNameController"
+      fx:id="root"
+      spacing="20"
+      styleClass="account-name"
+      stylesheets="@../css/account-name.css"
+      alignment="CENTER">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="como você quer chamar a sua conta?" styleClass="title-label"/>
+    
+    <TextField fx:id="accountNameField" 
+               promptText="Digite o nome da sua conta"
+               styleClass="account-name-field"/>
+    
+    <Button text="criar conta" 
+            onAction="#onCreateAccountClick"
+            styleClass="create-account-button"/>
+    
+</VBox>

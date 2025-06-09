@@ -1,0 +1,34 @@
+.account-name {
+    -fx-background-color: white;
+}
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #3bc604;
+    -fx-opacity: 0.7;
+}
+
+.account-name-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5 0;
+    -fx-pref-width: 300;
+}
+
+.account-name-field:focused {
+    -fx-border-color: #3bc604;
+}
+
+.create-account-button {
+    -fx-background-color: #3bc604;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.create-account-button:hover {
+    -fx-background-color: #32a003;
+} 

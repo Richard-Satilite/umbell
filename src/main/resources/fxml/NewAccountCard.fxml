@@ -11,6 +11,7 @@
       fx:controller="com.umbell.controller.NewAccountCardController"
       fx:id="root"
       styleClass="new-account-card"
+      onMouseClicked="#onCardClick"
       stylesheets="@../css/account-card.css">
     
     <padding>
@@ -19,7 +20,7 @@
     
     <HBox alignment="CENTER" spacing="10">
         <FontIcon iconLiteral="fas-plus-circle" iconSize="24" styleClass="plus-icon"/>
-        <Label text="Criar Nova Conta" styleClass="new-account-label"/>
+        <Label text="criar nova conta" styleClass="new-account-label"/>
     </HBox>
     
 </VBox>

@@ -3,6 +3,7 @@ package com.umbell.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.List;
 
 import com.umbell.models.User;
 import com.umbell.models.Account;
@@ -12,10 +13,13 @@ import com.umbell.repository.UserRepositoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class AccountSelectController implements Initializable {
 
@@ -27,9 +31,6 @@ public class AccountSelectController implements Initializable {
 
     @FXML
     private ListView<Account> accountsListView;
-
-    @FXML
-    private Button createAccountButton;
 
     private User user;
     private UserService userService;
@@ -46,8 +47,15 @@ public class AccountSelectController implements Initializable {
      */
     public void setUser(User user) {
         this.user = user;
-        welcomeLabel.setText("Bem-vindo(a), " + user.getName() + "!");
-        loadUserAccounts();
+        this.userService = new UserService(new UserRepositoryImpl());
+        updateWelcomeLabel();
+        loadAccounts();
+    }
+
+    private void updateWelcomeLabel() {
+        if (user != null) {
+            welcomeLabel.setText("Olá, " + user.getName() + "!");
+        }
     }
 
     private void setupAccountsListView() {
@@ -63,32 +71,21 @@ public class AccountSelectController implements Initializable {
         });
     }
 
-    private void loadUserAccounts() {
+    private void loadAccounts() {
         if (user != null) {
-            var accounts = userService.getUserAccounts(user);
+            List<Account> accounts = userService.getUserAccounts(user);
+            accountsListView.getItems().setAll(accounts);
+            
+            // Se não houver contas, mostra o card de nova conta
             if (accounts.isEmpty()) {
-                // Se não houver contas, mostra o card de nova conta
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NewAccountCard.fxml"));
-                    VBox newAccountCard = loader.load();
-                    
-                    // Adiciona o evento de clique no card
-                    newAccountCard.setOnMouseClicked(e -> onCreateAccountClick());
-                    
-                    accountsListView.getItems().clear();
+                    Parent newAccountCard = loader.load();
                     accountsListView.setPlaceholder(newAccountCard);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                accountsListView.getItems().setAll(accounts);
             }
         }
-    }
-
-    @FXML
-    private void onCreateAccountClick() {
-        // TODO: Implementar a criação de nova conta
-        System.out.println("Criar nova conta");
     }
 } 
