@@ -174,8 +174,8 @@ public class SignUpController implements Initializable {
             alert.setContentText("Usuário registrado com sucesso! Você já pode fazer login.");
             alert.showAndWait();
 
-            // Volta para a tela de login
-            //openLoginScreen();
+            // Abre a tela base com a seleção de conta
+            openBaseScreen(newUser);
             
         } catch (IllegalArgumentException e) {
             errorLabel.setText("Erro de validação: " + e.getMessage());
@@ -184,21 +184,27 @@ public class SignUpController implements Initializable {
         }
     }
 
-    @FXML
-    private void onBackToLoginClick() {
-        openLoginScreen();
-    }
-
-    private void openLoginScreen() {
+    private void openBaseScreen(User user) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/primary.fxml"));
+            URL fxmlUrl = getClass().getResource("/fxml/Base.fxml");
+            if (fxmlUrl == null) {
+                throw new IOException("Não foi possível encontrar o arquivo Base.fxml");
+            }
+            
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
+            
+            // Obtém o controller da tela base e passa o usuário
+            BaseController baseController = loader.getController();
+            baseController.setUser(user);
+            
             Scene scene = new Scene(root);
             Stage stage = (Stage) nameField.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            errorLabel.setText("Erro ao voltar para tela de login: " + e.getMessage());
+            e.printStackTrace(); // Adiciona o stack trace para debug
+            errorLabel.setText("Erro ao abrir tela base: " + e.getMessage());
         }
     }
 } 

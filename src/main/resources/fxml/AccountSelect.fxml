@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.umbell.controller.AccountSelectController"
+      fx:id="root"
+      spacing="20"
+      styleClass="account-select"
+      stylesheets="@../css/account-select.css"
+      VBox.vgrow="ALWAYS">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label fx:id="welcomeLabel" styleClass="welcome-label"/>
+    
+    <Label text="escolha a sua conta!" styleClass="choose-account-label">
+        <font>
+            <Font size="36.0" />
+        </font>
+    </Label>
+    
+    <ListView fx:id="accountsListView" VBox.vgrow="ALWAYS"/>
+    
+</VBox>

@@ -1,0 +1,12 @@
+.parent{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 30px;
+}
+
+.root {
+    -fx-background-color: white;
+}
+
+.border-pane {
+    -fx-background-color: white;
+}

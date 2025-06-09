@@ -101,8 +101,8 @@ public class SignInController implements Initializable {
             alert.setContentText("Login realizado com sucesso!");
             alert.showAndWait();
 
-            // Abre a tela principal
-            //openMainScreen(user);
+            // Abre a tela base com a seleção de conta
+            openBaseScreen(user);
             
         } catch (IllegalArgumentException e) {
             errorLabel.setText("Erro de validação: " + e.getMessage());
@@ -111,21 +111,27 @@ public class SignInController implements Initializable {
         }
     }
 
-    private void openMainScreen(User user) {
+    private void openBaseScreen(User user) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"));
+            URL fxmlUrl = getClass().getResource("/fxml/Base.fxml");
+            if (fxmlUrl == null) {
+                throw new IOException("Não foi possível encontrar o arquivo Base.fxml");
+            }
+            
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
             
-            // Obtém o controller da tela principal e passa o usuário
-            MainController mainController = loader.getController();
-            mainController.setUser(user);
+            // Obtém o controller da tela base e passa o usuário
+            BaseController baseController = loader.getController();
+            baseController.setUser(user);
             
             Scene scene = new Scene(root);
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            errorLabel.setText("Erro ao abrir tela principal: " + e.getMessage());
+            e.printStackTrace();
+            errorLabel.setText("Erro ao abrir tela base: " + e.getMessage());
         }
     }
 }
