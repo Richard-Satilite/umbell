@@ -43,7 +43,7 @@
             </HBox>
          </children>
       </VBox>
-      <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="436.0" styleClass="green-btn" stylesheets="@../css/signin.css" text="entrar" textFill="WHITE" VBox.vgrow="ALWAYS" onAction="#onLoginClick">
+      <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="432.0" styleClass="green-btn" stylesheets="@../css/signin.css" text="entrar" textFill="WHITE" onAction="#onLoginClick">
          <font>
             <Font size="18.0" />
          </font>
@@ -51,6 +51,7 @@
             <Insets top="20.0" />
          </VBox.margin>
       </Button>
+      <Label fx:id="errorLabel" textFill="RED" />
    </children>
    <padding>
       <Insets left="20.0" />

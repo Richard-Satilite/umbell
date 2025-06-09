@@ -64,6 +64,7 @@
             <Insets top="20.0" />
          </VBox.margin>
       </Button>
+      <Label fx:id="errorLabel" textFill="RED" />
    </children>
    <padding>
       <Insets left="20.0" />

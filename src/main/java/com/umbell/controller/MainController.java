@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.umbell.models.User;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -19,6 +21,7 @@ public class MainController implements Initializable {
     @FXML
     private VBox vbox;
     private Parent fxml;
+    private User user;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -28,6 +31,16 @@ public class MainController implements Initializable {
         t.setOnFinished((e) -> {
             loadFXMLWithFade("/fxml/SignIn.fxml");
         });
+    }
+
+    /**
+     * Define o usuário logado no sistema
+     * @param user O usuário que fez login
+     */
+    public void setUser(User user) {
+        this.user = user;
+        // Aqui você pode adicionar lógica adicional para atualizar a UI com os dados do usuário
+        System.out.println("Usuário logado: " + user.getName());
     }
 
     @FXML

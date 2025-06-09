@@ -1,5 +1,6 @@
 package com.umbell;
 
+import com.umbell.utils.DBInitializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +20,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        // Initialize database
+        DBInitializer.initialize();
+
         scene = new Scene(loadFXML("/fxml/Main"), 980, 680);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);

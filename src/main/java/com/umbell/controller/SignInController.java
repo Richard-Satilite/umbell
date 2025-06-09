@@ -4,15 +4,23 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.umbell.utils.ValidUtils;
+import com.umbell.service.UserService;
+import com.umbell.repository.UserRepositoryImpl;
+import com.umbell.models.User;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import java.io.IOException;
 
 public class SignInController implements Initializable {
 
@@ -26,31 +34,23 @@ public class SignInController implements Initializable {
     private VBox emailContainer;
     
     @FXML
-    private VBox passwordContainer;
-    
-    @FXML
     private Label emailErrorLabel;
-    
-    private Label passwordErrorLabel;
+
+    @FXML
+    private Label errorLabel;
+
+    private UserService userService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupEmailValidation();
-        setupPasswordValidation();
+        userService = new UserService(new UserRepositoryImpl());
     }
 
     private void setupEmailValidation() {
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
                 validateEmail();
-            }
-        });
-    }
-
-    private void setupPasswordValidation() {
-        passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) {
-                validatePassword();
             }
         });
     }
@@ -77,37 +77,55 @@ public class SignInController implements Initializable {
         }
     }
 
-    private boolean validatePassword() {
-        String password = passwordField.getText();
-        
-        if (password.length() < 8 && !password.isEmpty()) {
-            passwordField.setStyle("-fx-border-color: red;");
-            if (passwordErrorLabel == null) {
-                passwordErrorLabel = new Label("senha inválida!");
-                passwordErrorLabel.setStyle("-fx-text-fill: red;");
-                passwordContainer.getChildren().add(passwordErrorLabel);
-            }
-            return false;
-        } else {
-            passwordField.setStyle("");
-            if (passwordErrorLabel != null) {
-                passwordContainer.getChildren().remove(passwordErrorLabel);
-                passwordErrorLabel = null;
-            }
-            return !password.isEmpty();
-        }
-    }
-
     @FXML
     private void onLoginClick(ActionEvent event) {
-        boolean isEmailValid = validateEmail();
-        boolean isPasswordValid = validatePassword();
+        // Limpa mensagens de erro anteriores
+        errorLabel.setText("");
 
-        if (!isEmailValid || !isPasswordValid) {
-            ValidUtils.createCenteredAlert("Erro de validação","preencha todos os campos corretamente!").showAndWait();
+        boolean isEmailValid = validateEmail();
+        boolean isPasswordEmpty = passwordField.getText().isEmpty();
+
+        if (!isEmailValid || isPasswordEmpty) {
+            errorLabel.setText("Por favor, preencha todos os campos corretamente!");
             return;
         }
 
-        System.out.println("Login realizado com sucesso!");
+        try {
+            // Tenta fazer login usando o UserService
+            User user = userService.loadUser(emailField.getText(), passwordField.getText());
+            
+            // Se chegou aqui, o login foi bem sucedido
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Login realizado com sucesso!");
+            alert.showAndWait();
+
+            // Abre a tela principal
+            //openMainScreen(user);
+            
+        } catch (IllegalArgumentException e) {
+            errorLabel.setText("Erro de validação: " + e.getMessage());
+        } catch (RuntimeException e) {
+            errorLabel.setText("Erro ao fazer login: " + e.getMessage());
+        }
     }
-} 
+
+    private void openMainScreen(User user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"));
+            Parent root = loader.load();
+            
+            // Obtém o controller da tela principal e passa o usuário
+            MainController mainController = loader.getController();
+            mainController.setUser(user);
+            
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            errorLabel.setText("Erro ao abrir tela principal: " + e.getMessage());
+        }
+    }
+}

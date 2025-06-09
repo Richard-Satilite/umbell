@@ -54,5 +54,10 @@ coverage/
 ehthumbs.db
 Thumbs.db
 
+# Database files
+*.sql
+*.db
+*.db-journal
+
 # Arquivo bash
 run.sh

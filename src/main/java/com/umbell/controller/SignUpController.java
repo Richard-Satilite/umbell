@@ -4,15 +4,23 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.umbell.utils.ValidUtils;
+import com.umbell.service.UserService;
+import com.umbell.repository.UserRepositoryImpl;
+import com.umbell.models.User;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import java.io.IOException;
 
 public class SignUpController implements Initializable {
 
@@ -34,15 +42,21 @@ public class SignUpController implements Initializable {
     @FXML
     private VBox passwordContainer;
     
+    @FXML
+    private Label errorLabel;
+    
     private Label nameErrorLabel;
     private Label emailErrorLabel;
     private Label passwordErrorLabel;
+
+    private UserService userService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupNameValidation();
         setupEmailValidation();
         setupPasswordValidation();
+        userService = new UserService(new UserRepositoryImpl());
     }
 
     private void setupNameValidation() {
@@ -136,15 +150,55 @@ public class SignUpController implements Initializable {
 
     @FXML
     private void onSignUpClick(ActionEvent event) {
-        boolean isNameValid = validateName();
-        boolean isEmailValid = validateEmail();
-        boolean isPasswordValid = validatePassword();
+        String name = nameField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText();
 
-        if (!isNameValid || !isEmailValid || !isPasswordValid) {
-            ValidUtils.createCenteredAlert("Erro de validação", "preencha todos os campos corretamente!").showAndWait();
+        // Limpa mensagens de erro anteriores
+        errorLabel.setText("");
+
+        // Validações básicas
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Por favor, preencha todos os campos");
             return;
         }
 
-        System.out.println("Conta criada com sucesso!");
+        try {
+            // Tenta registrar o usuário usando o UserService
+            User newUser = userService.registerUser(name, email, password);
+            
+            // Se chegou aqui, o registro foi bem sucedido
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Usuário registrado com sucesso! Você já pode fazer login.");
+            alert.showAndWait();
+
+            // Volta para a tela de login
+            //openLoginScreen();
+            
+        } catch (IllegalArgumentException e) {
+            errorLabel.setText("Erro de validação: " + e.getMessage());
+        } catch (RuntimeException e) {
+            errorLabel.setText("Erro ao registrar: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void onBackToLoginClick() {
+        openLoginScreen();
+    }
+
+    private void openLoginScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/primary.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) nameField.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            errorLabel.setText("Erro ao voltar para tela de login: " + e.getMessage());
+        }
     }
 } 
