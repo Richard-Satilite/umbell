@@ -81,6 +81,11 @@ public class AccountSelectController implements Initializable {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NewAccountCard.fxml"));
                     Parent newAccountCard = loader.load();
+                    
+                    // Passa o usuário para o NewAccountCardController
+                    NewAccountCardController newAccountCardController = loader.getController();
+                    newAccountCardController.setUser(this.user);
+
                     accountsListView.setPlaceholder(newAccountCard);
                 } catch (IOException e) {
                     e.printStackTrace();

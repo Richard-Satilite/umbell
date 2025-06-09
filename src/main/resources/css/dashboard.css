@@ -1,0 +1,277 @@
+.dashboard-root {
+    -fx-background-color: #f0f2f5;
+}
+
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px 0;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 0);
+}
+
+.sidebar-logo {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3bc604;
+    -fx-padding: 0 0 20px 0;
+}
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+    -fx-text-fill: #555555;
+    -fx-padding: 10px;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #e6e6e6;
+}
+
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 15px 30px;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 0);
+    -fx-margin: 0 0 20px 0;
+}
+
+.topbar-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.topbar-greeting {
+    -fx-font-size: 18px;
+    -fx-text-fill: #555555;
+    -fx-opacity: 0.8;
+}
+
+.topbar-date {
+    -fx-font-size: 14px;
+    -fx-text-fill: #999999;
+}
+
+.main-content {
+    -fx-background-color: transparent;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.add-card-btn {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-font-size: 30px;
+    -fx-text-fill: #aaaaaa;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 100px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
+    -fx-pref-width: 250px;
+    -fx-pref-height: 150px;
+}
+
+.visa-card {
+    -fx-background-color: linear-gradient(to right bottom, #3b82f6, #60a5fa);
+}
+
+.gray-card {
+    -fx-background-color: #e0e0e0;
+}
+
+.card-type {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 0.8;
+}
+
+.visa-card .card-type {
+    -fx-text-fill: white;
+}
+
+.gray-card .card-type {
+    -fx-text-fill: #555555;
+}
+
+.card-balance {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10px 0;
+}
+
+.visa-card .card-balance {
+    -fx-text-fill: white;
+}
+
+.gray-card .card-balance {
+    -fx-text-fill: #333333;
+}
+
+.card-number {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 0.7;
+}
+
+.visa-card .card-number {
+    -fx-text-fill: white;
+}
+
+.gray-card .card-number {
+    -fx-text-fill: #777777;
+}
+
+.balance-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
+}
+
+.balance-value {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.balance-number {
+    -fx-font-size: 14px;
+    -fx-text-fill: #777777;
+    -fx-opacity: 0.8;
+    -fx-padding: 5px 0 15px 0;
+}
+
+.balance-period {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+    -fx-cursor: hand;
+}
+
+.balance-income {
+    -fx-font-size: 16px;
+    -fx-text-fill: #3bc604;
+}
+
+.balance-expense {
+    -fx-font-size: 16px;
+    -fx-text-fill: #ff0000;
+}
+
+.summary-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
+}
+
+.summary-income {
+    -fx-font-size: 16px;
+    -fx-text-fill: #3bc604;
+}
+
+.summary-expense {
+    -fx-font-size: 16px;
+    -fx-text-fill: #ff0000;
+}
+
+.generate-report {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3b82f6;
+    -fx-cursor: hand;
+}
+
+.summary-chart {
+    -fx-background-color: #e6e6e6;
+    -fx-background-radius: 5;
+}
+
+.transaction-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
+}
+
+.check-all {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3b82f6;
+    -fx-cursor: hand;
+}
+
+.transaction-item {
+    -fx-padding: 10px 0;
+    -fx-border-color: #eeeeee;
+    -fx-border-width: 0 0 1 0;
+}
+
+.transaction-item:last-child {
+    -fx-border-width: 0;
+}
+
+.transaction-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.transaction-type {
+    -fx-font-size: 14px;
+    -fx-text-fill: #777777;
+}
+
+.transaction-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.transaction-value.positive {
+    -fx-text-fill: #3bc604;
+}
+
+.transaction-value.negative {
+    -fx-text-fill: #ff0000;
+}
+
+.transaction-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999999;
+}
+
+.new-transaction-btn {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+}
+
+.new-transaction-btn:hover {
+    -fx-background-color: #2563eb;
+}
+
+.settings-btn {
+    -fx-background-color: #e6e6e6;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+}
+
+.settings-btn:hover {
+    -fx-background-color: #cccccc;
+} 

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="root"
+            prefWidth="1024" prefHeight="600"
+            styleClass="dashboard-root"
+            stylesheets="@../css/dashboard.css">
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="20" styleClass="sidebar" alignment="TOP_CENTER" prefWidth="70">
+            <children>
+                <FontIcon iconLiteral="fas-university" iconSize="28" styleClass="sidebar-logo"/>
+                <Button styleClass="sidebar-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-home" iconSize="20"/>
+                    </graphic>
+                </Button>
+                <Button styleClass="sidebar-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-credit-card" iconSize="20"/>
+                    </graphic>
+                </Button>
+                <Button styleClass="sidebar-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-chart-bar" iconSize="20"/>
+                    </graphic>
+                </Button>
+                <Button styleClass="sidebar-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-cog" iconSize="20"/>
+                    </graphic>
+                </Button>
+            </children>
+        </VBox>
+    </left>
+    <!-- Topbar -->
+    <top>
+        <HBox spacing="20" styleClass="topbar" alignment="CENTER_LEFT" prefHeight="60">
+            <children>
+                <Label text="Dashboard" styleClass="topbar-title"/>
+                <Label text="| Hello Matt, welcome back." styleClass="topbar-greeting"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="10:35, 01 April 2019" styleClass="topbar-date"/>
+            </children>
+        </HBox>
+    </top>
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="30" styleClass="main-content">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+            <children>
+                <!-- Cards and Balance Row -->
+                <HBox spacing="30">
+                    <children>
+                        <!-- Balance -->
+                        <VBox spacing="10" styleClass="balance-section" prefWidth="300">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <children>
+                                        <Label text="Balance" styleClass="section-title"/>
+                                        <Pane HBox.hgrow="ALWAYS"/>
+                                        <Label text="Last month ▼" styleClass="balance-period"/>
+                                    </children>
+                                </HBox>
+                                <Label text="0.00" styleClass="balance-value"/>
+                                <Label text="*****" styleClass="balance-number"/>
+                                <HBox spacing="20">
+                                    <children>
+                                        <Label text="Income" styleClass="balance-income"/>
+                                        <Label text="+0.00" styleClass="balance-income"/>
+                                        <Label text="Expense" styleClass="balance-expense"/>
+                                        <Label text="-0.00" styleClass="balance-expense"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <!-- Monthly Summary and Latest Transaction Row -->
+                <HBox spacing="30">
+                    <children>
+                        <!-- Monthly Summary -->
+                        <VBox spacing="10" styleClass="summary-section" prefWidth="600">
+                            <children>
+                                <Label text="Monthly summary" styleClass="section-title"/>
+                                <HBox spacing="10">
+                                    <children>
+                                        <VBox spacing="5">
+                                            <children>
+                                                <Label text="Income" styleClass="summary-income"/>
+                                                <Label text="+5000.00" styleClass="summary-income"/>
+                                                <Label text="Expense" styleClass="summary-expense"/>
+                                                <Label text="-234.55" styleClass="summary-expense"/>
+                                            </children>
+                                        </VBox>
+                                        <Pane VBox.vgrow="ALWAYS"/>
+                                        <Label text="Generate report" styleClass="generate-report"/>
+                                    </children>
+                                </HBox>
+                                <!-- Placeholder for chart -->
+                                <Pane minHeight="120" styleClass="summary-chart"/>
+                            </children>
+                        </VBox>
+                        <!-- Latest Transaction -->
+                        <VBox spacing="10" styleClass="transaction-section" prefWidth="350">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <children>
+                                        <Label text="Latest transaction" styleClass="section-title"/>
+                                        <Pane HBox.hgrow="ALWAYS"/>
+                                        <Label text="Check all" styleClass="check-all"/>
+                                    </children>
+                                </HBox>
+                                <VBox spacing="10">
+                                    <children>
+                                        <HBox spacing="10" styleClass="transaction-item">
+                                            <children>
+                                                <Label text="Starbucks" styleClass="transaction-title"/>
+                                                <Label text="Shopping" styleClass="transaction-type"/>
+                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                <Label text="-120.00" styleClass="transaction-value negative"/>
+                                                <Label text="31 Mar 2019" styleClass="transaction-date"/>
+                                            </children>
+                                        </HBox>
+                                        <HBox spacing="10" styleClass="transaction-item">
+                                            <children>
+                                                <Label text="Design Studio" styleClass="transaction-title"/>
+                                                <Label text="Salary" styleClass="transaction-type"/>
+                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                <Label text="+5000.00" styleClass="transaction-value positive"/>
+                                                <Label text="30 Mar 2019" styleClass="transaction-date"/>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <HBox spacing="10">
+                                    <children>
+                                        <Button text="New transaction" styleClass="new-transaction-btn"/>
+                                        <Button text="Settings" styleClass="settings-btn"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane> 
