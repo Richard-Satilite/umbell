@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.umbell.controller.GoalsController"
+      spacing="20"
+      styleClass="goals-container">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Metas" styleClass="section-title"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Adicionar meta" onAction="#onAddGoalClick" styleClass="add-goal-button"/>
+        <Button text="Voltar" onAction="#onBackToDashboardClick" styleClass="back-button"/>
+    </HBox>
+    
+    <Label fx:id="noGoalsLabel" text="Ainda não há metas definidas" styleClass="no-goals-label" visible="false"/>
+    <ListView fx:id="goalsListView" VBox.vgrow="ALWAYS" styleClass="goals-list-view"/>
+</VBox> 

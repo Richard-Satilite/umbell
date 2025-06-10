@@ -1,95 +1,122 @@
 package com.umbell.repository;
 
 import com.umbell.models.Account;
+import com.umbell.models.Movement;
+import com.umbell.models.Goal;
+import com.umbell.utilities.DatabaseUtil;
 
 import java.sql.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountRepositoryImpl implements AccountRepository {
-    private static final String DB_URL = "jdbc:sqlite:src/main/resources/database/umbell.db";
+
+    private final Connection connection;
+    private final MovementRepository movementRepository;
+    private final GoalRepository goalRepository;
+
+    public AccountRepositoryImpl() {
+        this.connection = DatabaseUtil.getConnection();
+        this.movementRepository = new MovementRepositoryImpl();
+        this.goalRepository = new GoalRepositoryImpl();
+    }
 
     @Override
     public Account save(Account account) {
         String sql = "INSERT INTO Account (totalBalance, user_email, created_at) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setBigDecimal(1, account.getTotalBalance());
             stmt.setString(2, account.getUserEmail());
             stmt.setTimestamp(3, Timestamp.valueOf(account.getCreatedAt()));
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                account.setCode(rs.getLong(1));
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating account failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    account.setCode(generatedKeys.getLong(1));
+                    account.setId(generatedKeys.getLong(1)); // Also set the 'id' field
+                } else {
+                    throw new SQLException("Creating account failed, no ID obtained.");
+                }
             }
             return account;
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar conta: " + e.getMessage(), e);
+            e.printStackTrace();
+            return null;
         }
     }
 
     @Override
-    public Optional<Account> findByCode(Long code) {
+    public Account findById(Long id) {
         String sql = "SELECT * FROM Account WHERE code = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, code);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return Optional.of(mapResultSetToAccount(rs));
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Account account = mapResultSetToAccount(rs);
+                    account.setMovements(movementRepository.findByAccountId(account.getCode()));
+                    account.setGoals(goalRepository.findByAccountId(account.getCode()));
+                    return account;
+                }
             }
-            return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar conta: " + e.getMessage(), e);
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override
-    public List<Account> findAllByUserEmail(String userEmail) {
-        String sql = "SELECT * FROM Account WHERE user_email = ?";
+    public List<Account> findByUserEmail(String userEmail) {
         List<Account> accounts = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM Account WHERE user_email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, userEmail);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                accounts.add(mapResultSetToAccount(rs));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Account account = mapResultSetToAccount(rs);
+                    account.setMovements(movementRepository.findByAccountId(account.getCode()));
+                    account.setGoals(goalRepository.findByAccountId(account.getCode()));
+                    accounts.add(account);
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar contas do usuário: " + e.getMessage(), e);
+            e.printStackTrace();
         }
         return accounts;
     }
 
     @Override
-    public Account update(Account account) {
+    public void update(Account account) {
         String sql = "UPDATE Account SET totalBalance = ?, user_email = ? WHERE code = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setBigDecimal(1, account.getTotalBalance());
             stmt.setString(2, account.getUserEmail());
             stmt.setLong(3, account.getCode());
             stmt.executeUpdate();
-            return account;
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar conta: " + e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 
     @Override
-    public boolean delete(Long code) {
+    public void delete(Long id) {
         String sql = "DELETE FROM Account WHERE code = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, code);
-            return stmt.executeUpdate() > 0;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar conta: " + e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 
     private Account mapResultSetToAccount(ResultSet rs) throws SQLException {
         Account account = new Account();
         account.setCode(rs.getLong("code"));
+        account.setId(rs.getLong("code")); // Also set the 'id' field
         account.setTotalBalance(rs.getBigDecimal("totalBalance"));
         account.setUserEmail(rs.getString("user_email"));
         account.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());

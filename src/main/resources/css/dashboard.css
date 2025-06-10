@@ -274,4 +274,172 @@
 
 .settings-btn:hover {
     -fx-background-color: #cccccc;
+}
+
+.no-movements-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #777777;
+    -fx-alignment: center;
+    -fx-padding: 20px;
+}
+
+.movements-list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.movements-list-view .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.movements-list-view .scroll-bar:vertical .increment-button,
+.movements-list-view .scroll-bar:vertical .decrement-button {
+    -fx-padding: 0;
+}
+
+.movements-list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5;
+}
+
+.movements-list-view .scroll-bar:vertical .track {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 5;
+}
+
+/* Notifications Styles */
+.notifications-container {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.notifications-list-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.notifications-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0 0 10 0;
+}
+
+.notifications-list-view .list-cell:empty {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.notification-message {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.notification-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+}
+
+.unread-notification {
+    -fx-background-color: #f0f7ff;
+    -fx-background-radius: 5;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5;
+}
+
+.no-notifications-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #666666;
+    -fx-alignment: center;
+}
+
+.back-button {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 5;
+}
+
+.back-button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+/* Goals Styles */
+.goals-container {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.goals-list-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.goals-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0 0 10 0;
+}
+
+.goals-list-view .list-cell:empty {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.goal-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.goal-target {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.goal-current {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.goal-progress {
+    -fx-accent: #3bc604;
+}
+
+.goal-progress .bar {
+    -fx-background-radius: 5;
+}
+
+.goal-progress .track {
+    -fx-background-radius: 5;
+}
+
+.goal-achieved {
+    -fx-background-color: #f0fff0;
+    -fx-background-radius: 5;
+    -fx-border-color: #3bc604;
+    -fx-border-radius: 5;
+}
+
+.no-goals-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #666666;
+    -fx-alignment: center;
+}
+
+.add-goal-button {
+    -fx-background-color: #3bc604;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 5;
+}
+
+.add-goal-button:hover {
+    -fx-background-color: #2fa003;
 } 
