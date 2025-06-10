@@ -4,49 +4,37 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Movement {
-    private Long code;
-    private Category category; // Changed from int typeId to Category object
-    private BigDecimal value;
-    private LocalDate date;
+    private Long id;
+    private Account account;
+    private MovementType type;
     private String description;
-    private Long accountCode; // Foreign key to Account
+    private BigDecimal amount;
+    private LocalDate date;
+    private String category;
+    private String notes;
 
-    public Movement() {
-        this.date = LocalDate.now();
+    public Long getId() {
+        return id;
     }
 
-    // Getters and Setters
-
-    public Long getCode() {
-        return code;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setCode(Long code) {
-        this.code = code;
+    public Account getAccount() {
+        return account;
     }
 
-    public Category getCategory() {
-        return category;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public MovementType getType() {
+        return type;
     }
 
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setType(MovementType type) {
+        this.type = type;
     }
 
     public String getDescription() {
@@ -57,11 +45,35 @@ public class Movement {
         this.description = description;
     }
 
-    public Long getAccountCode() {
-        return accountCode;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setAccountCode(Long accountCode) {
-        this.accountCode = accountCode;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 } 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.umbell.controller.TransacaoController"
+      spacing="10" styleClass="modal-content">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Text styleClass="modal-title" text="Nova Transação"/>
+    
+    <ComboBox fx:id="tipoTransacaoCombo" promptText="Tipo de Transação">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Entrada"/>
+                <String fx:value="Gasto"/>
+                <String fx:value="Investimento"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <TextField fx:id="descricaoField" promptText="Descrição"/>
+    
+    <TextField fx:id="valorField" promptText="Valor">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </TextField>
+
+    <DatePicker fx:id="dataField" promptText="Data"/>
+    
+    <ComboBox fx:id="categoriaCombo" promptText="Categoria"/>
+    
+    <TextArea fx:id="observacaoField" promptText="Observações" prefRowCount="3"/>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancelar" onAction="#handleCancelar"/>
+        <Button text="Salvar" onAction="#handleSalvar" styleClass="primary-button"/>
+    </HBox>
+</VBox> 

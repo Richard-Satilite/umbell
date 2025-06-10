@@ -121,7 +121,7 @@
                                 </VBox>
                                 <HBox spacing="10">
                                     <children>
-                                        <Button text="Adicionar" styleClass="new-transaction-btn"/>
+                                        <Button text="Adicionar" onAction="#handleNovaTransacao" styleClass="new-transaction-btn"/>
                                         <Button text="Configurações" styleClass="settings-btn"/>
                                     </children>
                                 </HBox>

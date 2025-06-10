@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 public class AccountNameController {
     
@@ -76,19 +77,28 @@ public class AccountNameController {
             System.out.println("onCreateAccountClick: Modal fechado.");
             
             // Abre o Dashboard.fxml e passa o usuário
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
-            Parent dashboardRoot = loader.load();
-            // Passa o usuário para o controller do dashboard
-            Object controller = loader.getController();
-            if (controller instanceof DashboardController) {
-                ((DashboardController) controller).setUser(user);
-                System.out.println("onCreateAccountClick: Usuário passado para DashboardController.");
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/Dashboard.fxml"));
+                Parent dashboardRoot = loader.load();
+                
+                // Passa o usuário para o controller do dashboard
+                Object controller = loader.getController();
+                if (controller instanceof DashboardController) {
+                    ((DashboardController) controller).setUser(user);
+                    System.out.println("onCreateAccountClick: Usuário passado para DashboardController.");
+                }
+                
+                Stage dashboardStage = new Stage();
+                dashboardStage.setTitle("Dashboard");
+                dashboardStage.setScene(new Scene(dashboardRoot));
+                dashboardStage.show();
+                System.out.println("onCreateAccountClick: Dashboard.fxml aberto.");
+            } catch (IOException e) {
+                System.err.println("Erro ao carregar Dashboard.fxml: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("Erro ao carregar Dashboard.fxml", e);
             }
-            Stage dashboardStage = new Stage();
-            dashboardStage.setTitle("Dashboard");
-            dashboardStage.setScene(new Scene(dashboardRoot));
-            dashboardStage.show();
-            System.out.println("onCreateAccountClick: Dashboard.fxml aberto.");
         } catch (Exception e) {
             System.err.println("onCreateAccountClick: Erro ao criar conta ou abrir dashboard: " + e.getMessage());
             e.printStackTrace();

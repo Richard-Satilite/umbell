@@ -3,66 +3,54 @@ package com.umbell.controller;
 import com.umbell.models.User;
 import com.umbell.models.Account;
 import com.umbell.models.Movement;
+import com.umbell.models.MovementType;
 import com.umbell.models.Notification;
 import com.umbell.repository.NotificationRepository;
 import com.umbell.repository.NotificationRepositoryImpl;
+import com.umbell.service.MovementService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.List;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import java.math.BigDecimal;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DashboardController {
-    @FXML
-    private Label greetingLabel;
-    
-    @FXML
-    private Label balanceValueLabel;
-    
-    @FXML
-    private Label balanceNumberLabel;
-    
-    @FXML
-    private Label incomeLabel;
-    
-    @FXML
-    private Label expenseLabel;
-    
-    @FXML
-    private Label summaryIncomeLabel;
-    
-    @FXML
-    private Label summaryExpenseLabel;
-
-    @FXML
-    private Label noMovementsLabel; // New Label for no movements message
-
-    @FXML
-    private ListView<Movement> movementsListView; // ListView for dynamic movements
-    
-    @FXML
-    private Label noNotificationsLabel;
-
-    @FXML
-    private ListView<Notification> notificationsListView;
-
-    @FXML
-    private BorderPane root;
+    @FXML private Label greetingLabel;
+    @FXML private Label balanceValueLabel;
+    @FXML private Label balanceNumberLabel;
+    @FXML private Label incomeLabel;
+    @FXML private Label expenseLabel;
+    @FXML private Label summaryIncomeLabel;
+    @FXML private Label summaryExpenseLabel;
+    @FXML private Label noMovementsLabel;
+    @FXML private ListView<Movement> movementsListView;
+    @FXML private Label noNotificationsLabel;
+    @FXML private ListView<Notification> notificationsListView;
+    @FXML private BorderPane root;
+    @FXML private Label saldoLabel;
     
     private User user;
     private Account currentAccount;
     private NotificationRepository notificationRepository;
     private VBox originalContent;
+    private MovementService movementService;
 
+    @FXML
     public void initialize() {
         notificationRepository = new NotificationRepositoryImpl();
-        // Store the original content
         originalContent = (VBox) root.getCenter();
+        movementService = new MovementService();
+        refreshData();
     }
 
     @FXML
@@ -101,6 +89,28 @@ public class DashboardController {
             root.setCenter(goalsView);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleNovaTransacao() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Transacao.fxml"));
+            Scene scene = new Scene(loader.load());
+            
+            TransacaoController controller = loader.getController();
+            controller.setDashboardController(this);
+            
+            Stage stage = new Stage();
+            stage.setTitle("Nova Transação");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            refreshData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erro", "Não foi possível abrir a janela de nova transação.");
         }
     }
 
@@ -168,11 +178,38 @@ public class DashboardController {
                 expenseLabel.setText("-0.00");
                 summaryIncomeLabel.setText("+0.00");
                 summaryExpenseLabel.setText("-0.00");
-                noMovementsLabel.setVisible(true);
-                movementsListView.setVisible(false);
             }
-        } else {
-            System.out.println("DashboardController: Usuário é null. Nenhum dado de UI será atualizado.");
         }
+    }
+
+    public void refreshData() {
+        if (currentAccount != null) {
+            // Recarrega os movimentos da conta
+            List<Movement> movements = movementService.findByAccountId(currentAccount.getId());
+            currentAccount.setMovements(movements);
+            updateUI();
+        }
+    }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    private BigDecimal calculateSaldo(List<Movement> movements) {
+        return movements.stream()
+            .map(movement -> {
+                BigDecimal amount = movement.getAmount();
+                return movement.getType() == MovementType.EXPENSE ? 
+                    amount.negate() : amount;
+            })
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 } 

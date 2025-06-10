@@ -5,7 +5,7 @@ import com.umbell.models.User;
 import com.umbell.models.Goal;
 import com.umbell.service.GoalService;
 import com.umbell.service.AccountService;
-import com.umbell.utilities.ValidUtils;
+import com.umbell.utils.ValidUtils;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

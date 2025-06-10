@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface AccountRepository {
     Account save(Account account);
-    Account findById(Long id);
-    List<Account> findByUserEmail(String userEmail);
     void update(Account account);
     void delete(Long id);
+    Account findById(Long id);
+    List<Account> findByUserEmail(String userEmail);
 } 

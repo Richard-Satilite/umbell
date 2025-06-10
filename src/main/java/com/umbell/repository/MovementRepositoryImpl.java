@@ -1,8 +1,9 @@
 package com.umbell.repository;
 
-import com.umbell.models.Category;
+import com.umbell.models.Account;
 import com.umbell.models.Movement;
-import com.umbell.utilities.DatabaseUtil;
+import com.umbell.models.MovementType;
+import com.umbell.utils.DatabaseUtil;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,47 +12,63 @@ import java.util.List;
 
 public class MovementRepositoryImpl implements MovementRepository {
 
-    private final Connection connection;
-    private final CategoryRepository categoryRepository;
-
-    public MovementRepositoryImpl() {
-        this.connection = DatabaseUtil.getConnection();
-        this.categoryRepository = new CategoryRepositoryImpl();
+    @Override
+    public void save(Movement movement) {
+        String sql = "INSERT INTO Movement (category_id, value, date, description, account_code) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, movement.getCategory());
+            stmt.setBigDecimal(2, movement.getAmount());
+            stmt.setString(3, movement.getDate().toString());
+            stmt.setString(4, movement.getDescription());
+            stmt.setLong(5, movement.getAccount().getCode());
+            
+            stmt.executeUpdate();
+            
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    movement.setId(rs.getLong(1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar movimento", e);
+        }
     }
 
     @Override
-    public Movement save(Movement movement) {
-        String sql = "INSERT INTO Movement (category_id, value, date, description, account_code) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setLong(1, movement.getCategory().getId());
-            stmt.setBigDecimal(2, movement.getValue());
+    public void update(Movement movement) {
+        String sql = "UPDATE Movement SET category_id = ?, value = ?, date = ?, description = ? WHERE code = ?";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, movement.getCategory());
+            stmt.setBigDecimal(2, movement.getAmount());
             stmt.setString(3, movement.getDate().toString());
             stmt.setString(4, movement.getDescription());
-            stmt.setLong(5, movement.getAccountCode());
-            int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("Creating movement failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    movement.setCode(generatedKeys.getLong(1));
-                } else {
-                    throw new SQLException("Creating movement failed, no ID obtained.");
-                }
-            }
-            return movement;
+            stmt.setLong(5, movement.getId());
+            
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Erro ao atualizar movimento", e);
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM Movement WHERE code = ?";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar movimento", e);
         }
     }
 
     @Override
     public Movement findById(Long id) {
         String sql = "SELECT * FROM Movement WHERE code = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -59,16 +76,37 @@ public class MovementRepositoryImpl implements MovementRepository {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar movimento", e);
         }
         return null;
     }
 
     @Override
+    public List<Movement> findByAccount(Account account) {
+        List<Movement> movements = new ArrayList<>();
+        String sql = "SELECT * FROM Movement WHERE account_code = ? ORDER BY date DESC";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, account.getCode());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Movement movement = mapResultSetToMovement(rs);
+                    movement.setAccount(account);
+                    movements.add(movement);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar movimentos da conta", e);
+        }
+        return movements;
+    }
+
+    @Override
     public List<Movement> findByAccountId(Long accountId) {
         List<Movement> movements = new ArrayList<>();
-        String sql = "SELECT * FROM Movement WHERE account_code = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        String sql = "SELECT * FROM Movement WHERE account_code = ? ORDER BY date DESC";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, accountId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -76,49 +114,18 @@ public class MovementRepositoryImpl implements MovementRepository {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar movimentos da conta", e);
         }
         return movements;
     }
 
-    @Override
-    public void update(Movement movement) {
-        String sql = "UPDATE Movement SET category_id = ?, value = ?, date = ?, description = ?, account_code = ? WHERE code = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, movement.getCategory().getId());
-            stmt.setBigDecimal(2, movement.getValue());
-            stmt.setString(3, movement.getDate().toString());
-            stmt.setString(4, movement.getDescription());
-            stmt.setLong(5, movement.getAccountCode());
-            stmt.setLong(6, movement.getCode());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(Long id) {
-        String sql = "DELETE FROM Movement WHERE code = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Movement mapResultSetToMovement(ResultSet rs) throws SQLException {
         Movement movement = new Movement();
-        movement.setCode(rs.getLong("code"));
-        movement.setValue(rs.getBigDecimal("value"));
+        movement.setId(rs.getLong("code"));
+        movement.setAmount(rs.getBigDecimal("value"));
         movement.setDate(LocalDate.parse(rs.getString("date")));
         movement.setDescription(rs.getString("description"));
-        movement.setAccountCode(rs.getLong("account_code"));
-
-        Long categoryId = rs.getLong("category_id");
-        Category category = categoryRepository.findById(categoryId);
-        movement.setCategory(category);
+        movement.setCategory(rs.getString("category_id"));
         return movement;
     }
 } 

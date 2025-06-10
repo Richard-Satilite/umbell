@@ -163,6 +163,22 @@ public class SignUpController implements Initializable {
             return;
         }
 
+        // Validações específicas
+        if (!validateName()) {
+            errorLabel.setText("Nome inválido. Deve conter nome e sobrenome.");
+            return;
+        }
+
+        if (!validateEmail()) {
+            errorLabel.setText("Email inválido.");
+            return;
+        }
+
+        if (!validatePassword()) {
+            errorLabel.setText("Senha inválida. Deve ter pelo menos 8 caracteres.");
+            return;
+        }
+
         try {
             // Tenta registrar o usuário usando o UserService
             User newUser = userService.registerUser(name, email, password);
@@ -181,6 +197,7 @@ public class SignUpController implements Initializable {
             errorLabel.setText("Erro de validação: " + e.getMessage());
         } catch (RuntimeException e) {
             errorLabel.setText("Erro ao registrar: " + e.getMessage());
+            e.printStackTrace(); // Para debug
         }
     }
 
@@ -203,7 +220,7 @@ public class SignUpController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace(); // Adiciona o stack trace para debug
+            e.printStackTrace();
             errorLabel.setText("Erro ao abrir tela base: " + e.getMessage());
         }
     }

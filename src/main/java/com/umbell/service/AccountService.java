@@ -20,7 +20,6 @@ public class AccountService {
     }
 
     public Account registerAccount(Account account) {
-        // Aqui você pode adicionar validações se necessário
         return accountRepository.save(account);
     }
 
@@ -29,15 +28,15 @@ public class AccountService {
             throw new IllegalArgumentException("Account and Movement cannot be null");
         }
 
-        // Set the account code for the movement
-        movement.setAccountCode(account.getCode());
+        // Set the account for the movement
+        movement.setAccount(account);
 
         // Save the movement
-        Movement savedMovement = movementRepository.save(movement);
-        account.getMovements().add(savedMovement);
+        movementRepository.save(movement);
+        account.getMovements().add(movement);
 
-        // Update account balance based on movement value
-        BigDecimal newBalance = account.getTotalBalance().add(movement.getValue());
+        // Update account balance based on movement amount
+        BigDecimal newBalance = account.getTotalBalance().add(movement.getAmount());
         account.setTotalBalance(newBalance);
         accountRepository.update(account);
 
