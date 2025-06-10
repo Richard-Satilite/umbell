@@ -8,6 +8,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.umbell.controller.DashboardController"
             fx:id="root"
             prefWidth="1024" prefHeight="600"
             styleClass="dashboard-root"
@@ -45,7 +46,7 @@
         <HBox spacing="20" styleClass="topbar" alignment="CENTER_LEFT" prefHeight="60">
             <children>
                 <Label text="Dashboard" styleClass="topbar-title"/>
-                <Label text="| Hello Matt, welcome back." styleClass="topbar-greeting"/>
+                <Label fx:id="greetingLabel" text="" styleClass="topbar-greeting"/>
                 <Pane HBox.hgrow="ALWAYS"/>
                 <Label text="10:35, 01 April 2019" styleClass="topbar-date"/>
             </children>
@@ -71,14 +72,14 @@
                                         <Label text="Last month ▼" styleClass="balance-period"/>
                                     </children>
                                 </HBox>
-                                <Label text="0.00" styleClass="balance-value"/>
-                                <Label text="*****" styleClass="balance-number"/>
+                                <Label fx:id="balanceValueLabel" text="" styleClass="balance-value"/>
+                                <Label fx:id="balanceNumberLabel" text="" styleClass="balance-number"/>
                                 <HBox spacing="20">
                                     <children>
                                         <Label text="Income" styleClass="balance-income"/>
-                                        <Label text="+0.00" styleClass="balance-income"/>
+                                        <Label fx:id="incomeLabel" text="" styleClass="balance-income"/>
                                         <Label text="Expense" styleClass="balance-expense"/>
-                                        <Label text="-0.00" styleClass="balance-expense"/>
+                                        <Label fx:id="expenseLabel" text="" styleClass="balance-expense"/>
                                     </children>
                                 </HBox>
                             </children>
@@ -97,9 +98,9 @@
                                         <VBox spacing="5">
                                             <children>
                                                 <Label text="Income" styleClass="summary-income"/>
-                                                <Label text="+5000.00" styleClass="summary-income"/>
+                                                <Label fx:id="summaryIncomeLabel" text="" styleClass="summary-income"/>
                                                 <Label text="Expense" styleClass="summary-expense"/>
-                                                <Label text="-234.55" styleClass="summary-expense"/>
+                                                <Label fx:id="summaryExpenseLabel" text="" styleClass="summary-expense"/>
                                             </children>
                                         </VBox>
                                         <Pane VBox.vgrow="ALWAYS"/>
