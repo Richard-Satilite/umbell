@@ -157,7 +157,7 @@ public class DashboardController {
         
         if (user != null) {
             // Update user's name
-            greetingLabel.setText("Olá, " + user.getName() + ", bem-vindo(a) de volta.");
+            greetingLabel.setText("Olá, " + user.getName() + ", bem-vindo(a) de volta!");
             System.out.println("DashboardController: greetingLabel atualizado para: " + greetingLabel.getText());
             
             if (currentAccount != null) {

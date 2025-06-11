@@ -55,13 +55,12 @@
                 <HBox spacing="30">
                     <children>
                         <!-- Balance -->
-                        <VBox spacing="10" styleClass="balance-section" prefWidth="300">
+                        <VBox spacing="10" styleClass="balance-section" prefWidth="500">
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="10">
                                     <children>
                                         <Label text="Saldo" styleClass="section-title"/>
                                         <Pane HBox.hgrow="ALWAYS"/>
-                                        <Label text="Último mês ▼" styleClass="balance-period"/>
                                     </children>
                                 </HBox>
                                 <Label fx:id="balanceValueLabel" text="" styleClass="balance-value"/>
@@ -81,7 +80,7 @@
                 <HBox spacing="30">
                     <children>
                         <!-- Monthly Summary -->
-                        <VBox spacing="10" styleClass="summary-section" prefWidth="600">
+                        <VBox spacing="10" styleClass="summary-section" prefWidth="500">
                             <children>
                                 <Label text="Resumo mensal" styleClass="section-title"/>
                                 <HBox spacing="10">
@@ -103,7 +102,7 @@
                             </children>
                         </VBox>
                         <!-- Latest Transaction -->
-                        <VBox spacing="10" styleClass="transaction-section" prefWidth="350">
+                        <VBox spacing="10" styleClass="transaction-section" prefWidth="450">
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="10">
                                     <children>

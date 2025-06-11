@@ -55,7 +55,21 @@ public class MovementListCell extends ListCell<Movement> {
             setGraphic(null);
         } else {
             descriptionLabel.setText(movement.getDescription() != null ? movement.getDescription() : "N/A");
-            categoryLabel.setText(movement.getType() != null ? movement.getType().toString() : "N/A");
+            if (movement.getType() != null) {
+                switch (movement.getType()) {
+                    case "Income":
+                        categoryLabel.setText("Entrada");
+                        break;
+                    case "Expense":
+                        categoryLabel.setText("Gasto");
+                        break;
+                    default:
+                        categoryLabel.setText("Investimento");
+                        break;
+                }
+            } else{
+                categoryLabel.setText("N/A");
+            }
             
             // Format value as currency and set color based on value
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
