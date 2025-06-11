@@ -2,6 +2,7 @@ package com.umbell.controller;
 
 import com.umbell.models.Movement;
 import com.umbell.models.Account;
+import com.umbell.service.AccountService;
 import com.umbell.service.MovementService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,10 +20,12 @@ public class TransacaoController {
     private MovementService movementService;
     private DashboardController dashboardController;
     private Account currentAccount;
+    private AccountService accountService;
 
     @FXML
     public void initialize() {
         movementService = new MovementService();
+        accountService = new AccountService();
         dataField.setValue(LocalDate.now());
         
         // Configurar validação do campo de valor
@@ -43,6 +46,7 @@ public class TransacaoController {
     @FXML
     private void handleSalvar() {
         try {
+            Integer addOrReduce = null;
             String tipo = tipoTransacaoCombo.getValue();
             String descricao = descricaoField.getText();
             BigDecimal valor = new BigDecimal(valorField.getText());
@@ -65,12 +69,15 @@ public class TransacaoController {
             switch (tipo) {
                 case "Entrada":
                     movement.setType("Income");
+                    addOrReduce = 1;
                     break;
                 case "Gasto":                
                     movement.setType("Expense");
+                    addOrReduce = 0;
                     break;
                 case "Investimento":
                     movement.setType("Investment");
+                    addOrReduce = 1;
                     break;
                 default:
                     showAlert("Erro", "Tipo de transação inválido.");
@@ -83,11 +90,20 @@ public class TransacaoController {
 
             movementService.save(movement);
             
+            if(addOrReduce != null){
+                if (addOrReduce == 1) {
+                    currentAccount.setTotalBalance(currentAccount.getTotalBalance().add(valor));
+                } else{
+                    currentAccount.setTotalBalance(currentAccount.getTotalBalance().subtract(valor));
+                }
+            }
+
+            accountService.updateAccount(currentAccount);
+
             // Atualizar o dashboard
             if (dashboardController != null) {
                 dashboardController.refreshData();
             }
-
             // Fechar o modal
             Stage stage = (Stage) descricaoField.getScene().getWindow();
             stage.close();
@@ -112,4 +128,4 @@ public class TransacaoController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-} 
+}
