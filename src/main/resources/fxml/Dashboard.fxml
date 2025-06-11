@@ -40,7 +40,7 @@
                 <Label text="Dashboard" styleClass="topbar-title"/>
                 <Label fx:id="greetingLabel" text="" styleClass="topbar-greeting"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="10:35, 01 April 2019" styleClass="topbar-date"/>
+                <Label fx:id= "dateLabel" text="" styleClass="topbar-date"/>
             </children>
         </HBox>
     </top>

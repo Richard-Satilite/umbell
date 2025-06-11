@@ -58,4 +58,20 @@ public class AccountService {
     public void deleteAccount(Long id) {
         accountRepository.delete(id);
     }
+
+    public BigDecimal getTotalMovementsByAccountId(Long accountId){
+        return movementRepository.getTotalMovementsByAccountId(accountId);
+    }
+
+    public BigDecimal getTotalExpensesByAccountId(Long accountId){
+        return movementRepository.getTotalExpensesByAccountId(accountId);
+    }
+
+    public BigDecimal getTotalIncomesByAccountId(Long accountId){
+        return movementRepository.getTotalIncomesByAccountId(accountId);
+    }
+
+    public BigDecimal getTotalInvestmentsByAccountId(Long accountId){
+        return movementRepository.getTotalInvestmentsByAccountId(accountId);
+    }
 } 

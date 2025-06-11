@@ -10,7 +10,6 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <javafx.version>21</javafx.version>
-        <javafx.lib.path>/usr/lib/jvm/java-21-openjdk/lib/javafx</javafx.lib.path>
     </properties>
     <dependencies>
         <dependency>
@@ -75,15 +74,6 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.umbell.App</mainClass>
-                    <options>
-                        <option>--module-path</option>
-                        <option>${javafx.lib.path}</option>
-                        <option>--add-modules</option>
-                        <option>javafx.controls,javafx.fxml</option>
-                    </options>
-                    <environment>
-                        <LD_LIBRARY_PATH>${javafx.lib.path}</LD_LIBRARY_PATH>
-                    </environment>
                 </configuration>
             </plugin>
             <plugin>
@@ -92,9 +82,6 @@
                 <version>3.1.0</version>
                 <configuration>
                     <mainClass>com.umbell.App</mainClass>
-                    <environmentVariables>
-                        <LD_LIBRARY_PATH>${javafx.lib.path}</LD_LIBRARY_PATH>
-                    </environmentVariables>
                 </configuration>
             </plugin>
             <plugin>

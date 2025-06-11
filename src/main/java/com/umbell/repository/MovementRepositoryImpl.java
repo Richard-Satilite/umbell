@@ -5,6 +5,7 @@ import com.umbell.models.Movement;
 import com.umbell.models.MovementType;
 import com.umbell.utils.DatabaseUtil;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -127,5 +128,86 @@ public class MovementRepositoryImpl implements MovementRepository {
         movement.setDescription(rs.getString("description"));
         movement.setCategory(rs.getString("category_id"));
         return movement;
+    }
+
+    @Override
+    public BigDecimal getTotalMovementsByAccountId(Long accountId) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        String sql = "SELECT SUM(value) FROM movements WHERE account_id = ?";
+        try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, accountId);
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    totalAmount = rs.getBigDecimal(1);
+                }
+            }
+        } catch(SQLException e){
+            throw new RuntimeException("Erro ao buscar a soma das movimentacoes da conta", e);
+        }
+
+        return totalAmount;
+    }
+
+    @Override
+    public BigDecimal getTotalExpensesByAccountId(Long accountId) {
+        BigDecimal totalExpenses = BigDecimal.ZERO;
+        String sql = "SELECT COALESCE(SUM(m.value), 0) AS total_expenses " +
+                     "FROM Movement m " +
+                     "JOIN Category c ON m.category_id = c.id " +
+                     "WHERE m.account_code = ? AND c.categoryType = 'Expenses'";
+        try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, accountId);
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    totalExpenses = rs.getBigDecimal(1);
+                }
+            }
+        } catch(SQLException e){
+            throw new RuntimeException("Erro ao buscar a soma dos gastos da conta", e);
+        }
+
+        return totalExpenses;
+    }
+
+    @Override
+    public BigDecimal getTotalIncomesByAccountId(Long accountId) {
+        BigDecimal totalIncomes = BigDecimal.ZERO;
+        String sql = "SELECT COALESCE(SUM(m.value), 0) AS total_incomes " +
+                     "FROM Movement m " +
+                     "JOIN Category c ON m.category_id = c.id " +
+                     "WHERE m.account_code = ? AND c.categoryType = 'Income'";
+        try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, accountId);
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    totalIncomes = rs.getBigDecimal(1);
+                }
+            }
+        } catch(SQLException e){
+            throw new RuntimeException("Erro ao buscar a soma dos ganhos da conta", e);
+        }
+
+        return totalIncomes;
+    }
+
+    @Override
+    public BigDecimal getTotalInvestmentsByAccountId(Long accountId) {
+        BigDecimal totalInvestments = BigDecimal.ZERO;
+        String sql = "SELECT COALESCE(SUM(m.value), 0) AS total_investments " +
+                     "FROM Movement m " +
+                     "JOIN Category c ON m.category_id = c.id " +
+                     "WHERE m.account_code = ? AND c.categoryType = 'Investment'";
+        try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, accountId);
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    totalInvestments = rs.getBigDecimal(1);
+                }
+            }
+        } catch(SQLException e){
+            throw new RuntimeException("Erro ao buscar a soma dos investimentos da conta", e);
+        }
+
+        return totalInvestments;
     }
 } 

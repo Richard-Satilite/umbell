@@ -7,6 +7,7 @@ import com.umbell.models.MovementType;
 import com.umbell.models.Notification;
 import com.umbell.repository.NotificationRepository;
 import com.umbell.repository.NotificationRepositoryImpl;
+import com.umbell.service.AccountService;
 import com.umbell.service.MovementService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,15 +18,20 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.math.BigDecimal;
+import java.sql.Date;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DashboardController {
     @FXML private Label greetingLabel;
+    @FXML private Label dateLabel;
     @FXML private Label balanceValueLabel;
     @FXML private Label balanceNumberLabel;
     @FXML private Label incomeLabel;
@@ -44,12 +50,14 @@ public class DashboardController {
     private NotificationRepository notificationRepository;
     private VBox originalContent;
     private MovementService movementService;
+    private AccountService accountService;
 
     @FXML
     public void initialize() {
         notificationRepository = new NotificationRepositoryImpl();
         originalContent = (VBox) root.getCenter();
         movementService = new MovementService();
+        accountService = new AccountService();
         refreshData();
     }
 
@@ -132,7 +140,17 @@ public class DashboardController {
     
     public void updateUI() {
         System.out.println("DashboardController: updateUI chamado.");
-        // Restore the original content
+        
+        // Obtendo data atual
+        LocalDate currDate = LocalDate.now();
+        DateTimeFormatter currentDateFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale.forLanguageTag("pt-BR"));
+        dateLabel.setText(currDate.format(currentDateFormatter));
+
+        //Obtendo total de ganhos e despesas
+        BigDecimal incomes = accountService.getTotalIncomesByAccountId(currentAccount.getCode());
+        BigDecimal expenses = accountService.getTotalExpensesByAccountId(currentAccount.getCode());
+
+        // Restaurando conteudo original
         root.setCenter(originalContent);
         
         if (user != null) {
@@ -152,10 +170,10 @@ public class DashboardController {
                 
                 // Set income and expense to 0 for now
                 // TODO: Implement actual income and expense calculation
-                incomeLabel.setText("+0.00");
-                expenseLabel.setText("-0.00");
-                summaryIncomeLabel.setText("+0.00");
-                summaryExpenseLabel.setText("-0.00");
+                incomeLabel.setText(String.format("+%.2f", incomes.doubleValue()));
+                expenseLabel.setText(String.format("-%.2f", expenses.doubleValue()));
+                summaryIncomeLabel.setText(String.format("+%.2f", incomes.doubleValue()));
+                summaryExpenseLabel.setText(String.format("-%.2f", expenses.doubleValue()));
 
                 // Load and display movements
                 List<Movement> movements = currentAccount.getMovements();
