@@ -1,7 +1,6 @@
 package com.umbell.controller;
 
 import com.umbell.models.Movement;
-import com.umbell.models.MovementType;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Label;
@@ -56,14 +55,14 @@ public class MovementListCell extends ListCell<Movement> {
             setGraphic(null);
         } else {
             descriptionLabel.setText(movement.getDescription() != null ? movement.getDescription() : "N/A");
-            categoryLabel.setText(movement.getCategory() != null ? movement.getCategory() : "N/A");
+            categoryLabel.setText(movement.getType() != null ? movement.getType().toString() : "N/A");
             
             // Format value as currency and set color based on value
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
             String formattedValue = currencyFormat.format(movement.getAmount());
             valueLabel.setText(formattedValue);
             
-            if (movement.getType() == MovementType.EXPENSE) {
+            if (movement.getType().equals("Expense")) {
                 valueLabel.getStyleClass().add("negative");
                 valueLabel.getStyleClass().remove("positive");
             } else {

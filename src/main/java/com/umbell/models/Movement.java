@@ -6,11 +6,10 @@ import java.time.LocalDate;
 public class Movement {
     private Long id;
     private Account account;
-    private MovementType type;
+    private String type;
     private String description;
     private BigDecimal amount;
     private LocalDate date;
-    private String category;
     private String notes;
 
     public Long getId() {
@@ -29,11 +28,11 @@ public class Movement {
         this.account = account;
     }
 
-    public MovementType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(MovementType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -59,14 +58,6 @@ public class Movement {
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getNotes() {

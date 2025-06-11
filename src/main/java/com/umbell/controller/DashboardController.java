@@ -3,7 +3,6 @@ package com.umbell.controller;
 import com.umbell.models.User;
 import com.umbell.models.Account;
 import com.umbell.models.Movement;
-import com.umbell.models.MovementType;
 import com.umbell.models.Notification;
 import com.umbell.repository.NotificationRepository;
 import com.umbell.repository.NotificationRepositoryImpl;
@@ -33,7 +32,6 @@ public class DashboardController {
     @FXML private Label greetingLabel;
     @FXML private Label dateLabel;
     @FXML private Label balanceValueLabel;
-    @FXML private Label balanceNumberLabel;
     @FXML private Label incomeLabel;
     @FXML private Label expenseLabel;
     @FXML private Label summaryIncomeLabel;
@@ -150,6 +148,10 @@ public class DashboardController {
         BigDecimal incomes = accountService.getTotalIncomesByAccountId(currentAccount.getCode());
         BigDecimal expenses = accountService.getTotalExpensesByAccountId(currentAccount.getCode());
 
+        // Garantir que os valores não sejam nulos
+        if (incomes == null) incomes = BigDecimal.ZERO;
+        if (expenses == null) expenses = BigDecimal.ZERO;
+
         // Restaurando conteudo original
         root.setCenter(originalContent);
         
@@ -165,7 +167,6 @@ public class DashboardController {
                 
                 // Update balance
                 balanceValueLabel.setText(formattedBalance);
-                balanceNumberLabel.setText("*****");
                 System.out.println("DashboardController: Saldo atualizado para: " + formattedBalance);
                 
                 // Set income and expense to 0 for now
@@ -191,7 +192,6 @@ public class DashboardController {
             } else {
                 System.out.println("DashboardController: currentAccount é null. Saldo e informações financeiras não atualizadas.");
                 balanceValueLabel.setText("R$ 0,00"); // Default value
-                balanceNumberLabel.setText("*****");
                 incomeLabel.setText("+0.00");
                 expenseLabel.setText("-0.00");
                 summaryIncomeLabel.setText("+0.00");
@@ -203,7 +203,7 @@ public class DashboardController {
     public void refreshData() {
         if (currentAccount != null) {
             // Recarrega os movimentos da conta
-            List<Movement> movements = movementService.findByAccountId(currentAccount.getId());
+            List<Movement> movements = movementService.findByAccountId(currentAccount.getCode());
             currentAccount.setMovements(movements);
             updateUI();
         }
@@ -217,7 +217,7 @@ public class DashboardController {
         return movements.stream()
             .map(movement -> {
                 BigDecimal amount = movement.getAmount();
-                return movement.getType() == MovementType.EXPENSE ? 
+                return movement.getType().equals("Expense") ? 
                     amount.negate() : amount;
             })
             .reduce(BigDecimal.ZERO, BigDecimal::add);

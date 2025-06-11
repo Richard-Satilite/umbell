@@ -12,7 +12,6 @@ public class Account {
     private LocalDateTime createdAt;
     private List<Movement> movements;
     private List<Goal> goals;
-    private Long id;
 
     public Account() {  
         this.totalBalance = BigDecimal.ZERO;
@@ -72,13 +71,5 @@ public class Account {
 
     public void setGoals(List<Goal> goals) {
         this.goals = goals;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 } 

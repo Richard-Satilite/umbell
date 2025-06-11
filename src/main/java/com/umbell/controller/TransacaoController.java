@@ -1,7 +1,6 @@
 package com.umbell.controller;
 
 import com.umbell.models.Movement;
-import com.umbell.models.MovementType;
 import com.umbell.models.Account;
 import com.umbell.service.MovementService;
 import javafx.fxml.FXML;
@@ -15,7 +14,6 @@ public class TransacaoController {
     @FXML private TextField descricaoField;
     @FXML private TextField valorField;
     @FXML private DatePicker dataField;
-    @FXML private ComboBox<String> categoriaCombo;
     @FXML private TextArea observacaoField;
 
     private MovementService movementService;
@@ -49,7 +47,6 @@ public class TransacaoController {
             String descricao = descricaoField.getText();
             BigDecimal valor = new BigDecimal(valorField.getText());
             LocalDate data = dataField.getValue();
-            String categoria = categoriaCombo.getValue();
             String observacao = observacaoField.getText();
 
             if (tipo == null || descricao.isEmpty() || valor.compareTo(BigDecimal.ZERO) <= 0 || data == null) {
@@ -65,28 +62,23 @@ public class TransacaoController {
             Movement movement = new Movement();
             movement.setAccount(currentAccount);
             
-            // Mapear o tipo de transação para o enum MovementType
-            MovementType movementType;
             switch (tipo) {
                 case "Entrada":
-                    movementType = MovementType.INCOME;
+                    movement.setType("Income");
                     break;
-                case "Gasto":
-                    movementType = MovementType.EXPENSE;
+                case "Gasto":                
+                    movement.setType("Expense");
                     break;
                 case "Investimento":
-                    movementType = MovementType.INVESTMENT;
+                    movement.setType("Investment");
                     break;
                 default:
                     showAlert("Erro", "Tipo de transação inválido.");
                     return;
             }
-            
-            movement.setType(movementType);
             movement.setDescription(descricao);
             movement.setAmount(valor);
             movement.setDate(data);
-            movement.setCategory(categoria);
             movement.setNotes(observacao);
 
             movementService.save(movement);

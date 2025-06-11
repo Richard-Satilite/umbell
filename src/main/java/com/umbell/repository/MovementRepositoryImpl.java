@@ -2,7 +2,6 @@ package com.umbell.repository;
 
 import com.umbell.models.Account;
 import com.umbell.models.Movement;
-import com.umbell.models.MovementType;
 import com.umbell.utils.DatabaseUtil;
 
 import java.math.BigDecimal;
@@ -15,10 +14,10 @@ public class MovementRepositoryImpl implements MovementRepository {
 
     @Override
     public void save(Movement movement) {
-        String sql = "INSERT INTO Movement (category_id, value, date, description, account_code) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movement (category, value, date, description, account_code) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, movement.getCategory());
+            stmt.setString(1, movement.getType());
             stmt.setBigDecimal(2, movement.getAmount());
             stmt.setString(3, movement.getDate().toString());
             stmt.setString(4, movement.getDescription());
@@ -38,10 +37,10 @@ public class MovementRepositoryImpl implements MovementRepository {
 
     @Override
     public void update(Movement movement) {
-        String sql = "UPDATE Movement SET category_id = ?, value = ?, date = ?, description = ? WHERE code = ?";
+        String sql = "UPDATE Movement SET category = ?, value = ?, date = ?, description = ? WHERE code = ?";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, movement.getCategory());
+            stmt.setString(1, movement.getType());
             stmt.setBigDecimal(2, movement.getAmount());
             stmt.setString(3, movement.getDate().toString());
             stmt.setString(4, movement.getDescription());
@@ -126,14 +125,14 @@ public class MovementRepositoryImpl implements MovementRepository {
         movement.setAmount(rs.getBigDecimal("value"));
         movement.setDate(LocalDate.parse(rs.getString("date")));
         movement.setDescription(rs.getString("description"));
-        movement.setCategory(rs.getString("category_id"));
+        movement.setType(rs.getString("category"));
         return movement;
     }
 
     @Override
     public BigDecimal getTotalMovementsByAccountId(Long accountId) {
         BigDecimal totalAmount = BigDecimal.ZERO;
-        String sql = "SELECT SUM(value) FROM movements WHERE account_id = ?";
+        String sql = "SELECT SUM(value) FROM Movement WHERE account_code = ?";
         try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, accountId);
             try (ResultSet rs = stmt.executeQuery()){
@@ -151,10 +150,7 @@ public class MovementRepositoryImpl implements MovementRepository {
     @Override
     public BigDecimal getTotalExpensesByAccountId(Long accountId) {
         BigDecimal totalExpenses = BigDecimal.ZERO;
-        String sql = "SELECT COALESCE(SUM(m.value), 0) AS total_expenses " +
-                     "FROM Movement m " +
-                     "JOIN Category c ON m.category_id = c.id " +
-                     "WHERE m.account_code = ? AND c.categoryType = 'Expenses'";
+        String sql = "SELECT SUM(value) FROM Movement WHERE account_code = ? AND category = 'Expense'";
         try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, accountId);
             try (ResultSet rs = stmt.executeQuery()){
@@ -172,10 +168,7 @@ public class MovementRepositoryImpl implements MovementRepository {
     @Override
     public BigDecimal getTotalIncomesByAccountId(Long accountId) {
         BigDecimal totalIncomes = BigDecimal.ZERO;
-        String sql = "SELECT COALESCE(SUM(m.value), 0) AS total_incomes " +
-                     "FROM Movement m " +
-                     "JOIN Category c ON m.category_id = c.id " +
-                     "WHERE m.account_code = ? AND c.categoryType = 'Income'";
+        String sql = "SELECT SUM(value) FROM Movement WHERE account_code = ? AND category = 'Income'";
         try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, accountId);
             try (ResultSet rs = stmt.executeQuery()){
@@ -193,10 +186,7 @@ public class MovementRepositoryImpl implements MovementRepository {
     @Override
     public BigDecimal getTotalInvestmentsByAccountId(Long accountId) {
         BigDecimal totalInvestments = BigDecimal.ZERO;
-        String sql = "SELECT COALESCE(SUM(m.value), 0) AS total_investments " +
-                     "FROM Movement m " +
-                     "JOIN Category c ON m.category_id = c.id " +
-                     "WHERE m.account_code = ? AND c.categoryType = 'Investment'";
+        String sql = "SELECT SUM(value) FROM Movement WHERE account_code = ? AND category = 'Investment'";
         try(Connection conn = DatabaseUtil.connect(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, accountId);
             try (ResultSet rs = stmt.executeQuery()){

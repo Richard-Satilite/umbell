@@ -38,8 +38,6 @@
 
     <DatePicker fx:id="dataField" promptText="Data"/>
     
-    <ComboBox fx:id="categoriaCombo" promptText="Categoria"/>
-    
     <TextArea fx:id="observacaoField" promptText="Observações" prefRowCount="3"/>
     
     <HBox spacing="10" alignment="CENTER_RIGHT">
