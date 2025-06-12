@@ -4,21 +4,27 @@ import java.time.LocalDateTime;
 
 public class Notification {
     private Long id;
-    private Long userId;
+    private String name;
     private String message;
-    private boolean isRead;
+    private boolean read;
+    private String userEmail;
     private LocalDateTime createdAt;
 
-    public Notification(Long id, Long userId, String message, boolean isRead, LocalDateTime createdAt) {
+    public Notification(Long id, String name, String message, boolean read, String userEmail) {
         this.id = id;
-        this.userId = userId;
+        this.name = name;
         this.message = message;
-        this.isRead = isRead;
-        this.createdAt = createdAt;
+        this.read = read;
+        this.userEmail = userEmail;
+        this.createdAt = LocalDateTime.now();
     }
 
-    public Notification(Long userId, String message) {
-        this(null, userId, message, false, LocalDateTime.now());
+    public Notification(String name, String message, String userEmail) {
+        this.name = name;
+        this.message = message;
+        this.read = false;
+        this.userEmail = userEmail;
+        this.createdAt = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -30,12 +36,12 @@ public class Notification {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getName() {
+        return name;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMessage() {
@@ -47,11 +53,19 @@ public class Notification {
     }
 
     public boolean isRead() {
-        return isRead;
+        return read;
     }
 
     public void setRead(boolean read) {
-        isRead = read;
+        this.read = read;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -66,9 +80,10 @@ public class Notification {
     public String toString() {
         return "Notification{" +
                "id=" + id +
-               ", userId=" + userId +
+               ", name='" + name + '\'' +
                ", message='" + message + '\'' +
-               ", isRead=" + isRead +
+               ", read=" + read +
+               ", userEmail='" + userEmail + '\'' +
                ", createdAt=" + createdAt +
                '}';
     }

@@ -12,14 +12,14 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public Notification save(Notification notification) {
-        String sql = "INSERT INTO notifications (user_id, message, is_read, created_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Notification (name, message, read, user_email) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setLong(1, notification.getUserId());
+            pstmt.setString(1, notification.getName());
             pstmt.setString(2, notification.getMessage());
             pstmt.setBoolean(3, notification.isRead());
-            pstmt.setString(4, notification.getCreatedAt().toString());
+            pstmt.setString(4, notification.getUserEmail());
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -42,7 +42,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public Optional<Notification> findById(Long id) {
-        String sql = "SELECT * FROM notifications WHERE id = ?";
+        String sql = "SELECT * FROM Notification WHERE id = ?";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -61,7 +61,9 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public List<Notification> findByUserId(Long userId) {
         List<Notification> notifications = new ArrayList<>();
-        String sql = "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
+        String sql = "SELECT n.* FROM Notification n " +
+                    "JOIN User u ON n.user_email = u.email " +
+                    "WHERE u.id = ?";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -80,7 +82,9 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public List<Notification> findUnreadByUserId(Long userId) {
         List<Notification> notifications = new ArrayList<>();
-        String sql = "SELECT * FROM notifications WHERE user_id = ? AND is_read = FALSE ORDER BY created_at DESC";
+        String sql = "SELECT n.* FROM Notification n " +
+                    "JOIN User u ON n.user_email = u.email " +
+                    "WHERE u.id = ? AND n.read = FALSE";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -98,14 +102,14 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public void update(Notification notification) {
-        String sql = "UPDATE notifications SET user_id = ?, message = ?, is_read = ?, created_at = ? WHERE id = ?";
+        String sql = "UPDATE Notification SET name = ?, message = ?, read = ?, user_email = ? WHERE id = ?";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setLong(1, notification.getUserId());
+            pstmt.setString(1, notification.getName());
             pstmt.setString(2, notification.getMessage());
             pstmt.setBoolean(3, notification.isRead());
-            pstmt.setString(4, notification.getCreatedAt().toString());
+            pstmt.setString(4, notification.getUserEmail());
             pstmt.setLong(5, notification.getId());
 
             pstmt.executeUpdate();
@@ -116,7 +120,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public void delete(Long id) {
-        String sql = "DELETE FROM notifications WHERE id = ?";
+        String sql = "DELETE FROM Notification WHERE id = ?";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -129,7 +133,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public void markAsRead(Long id) {
-        String sql = "UPDATE notifications SET is_read = TRUE WHERE id = ?";
+        String sql = "UPDATE Notification SET read = TRUE WHERE id = ?";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -141,12 +145,14 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     private Notification mapRowToNotification(ResultSet rs) throws SQLException {
-        return new Notification(
+        Notification notification = new Notification(
                 rs.getLong("id"),
-                rs.getLong("user_id"),
+                rs.getString("name"),
                 rs.getString("message"),
-                rs.getBoolean("is_read"),
-                LocalDateTime.parse(rs.getString("created_at"))
+                rs.getBoolean("read"),
+                rs.getString("user_email")
         );
+        notification.setCreatedAt(LocalDateTime.now());
+        return notification;
     }
 } 

@@ -32,7 +32,11 @@ public class GoalsController {
     @FXML
     public void initialize() {
         goalService = new GoalService();
-        goalsListView.setCellFactory(lv -> new GoalListCell());
+        goalsListView.setCellFactory(lv -> {
+            GoalListCell cell = new GoalListCell();
+            cell.setUser(user);
+            return cell;
+        });
     }
     
     public void setUser(User user) {

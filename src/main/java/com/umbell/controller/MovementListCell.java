@@ -22,9 +22,9 @@ public class MovementListCell extends ListCell<Movement> {
 
     public MovementListCell() {
         super();
-        content = new HBox(10); // Spacing between elements
+        content = new HBox(10);
         content.setPadding(new Insets(10, 5, 10, 5));
-        content.getStyleClass().add("transaction-item"); // Apply CSS style if available
+        content.getStyleClass().add("transaction-item");
 
         descriptionLabel = new Label();
         descriptionLabel.getStyleClass().add("transaction-title");
