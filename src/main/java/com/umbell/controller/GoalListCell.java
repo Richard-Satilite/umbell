@@ -7,6 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import java.math.BigDecimal;
 
 public class GoalListCell extends ListCell<Goal> {
     private final VBox content;
@@ -46,12 +47,18 @@ public class GoalListCell extends ListCell<Goal> {
         } else {
             titleLabel.setText(goal.getTitle());
             targetLabel.setText(String.format("Meta: R$ %.2f", goal.getTargetAmount()));
-            currentLabel.setText(String.format("Atual: R$ %.2f", goal.getCurrentAmount()));
             
-            double progress = goal.getCurrentAmount() / goal.getTargetAmount();
+            // Usa o saldo total da conta como valor atual
+            BigDecimal currentBalance = goal.getAccount().getTotalBalance();
+            currentLabel.setText(String.format("Atual: R$ %.2f", currentBalance.doubleValue()));
+            
+            // Calcula o progresso baseado no saldo total da conta
+            double progress = currentBalance.doubleValue() / goal.getTargetAmount();
             progressBar.setProgress(Math.min(progress, 1.0));
 
-            if (goal.isAchieved()) {
+            // Atualiza o status de atingida baseado no saldo total
+            boolean isAchieved = currentBalance.doubleValue() >= goal.getTargetAmount();
+            if (isAchieved) {
                 content.getStyleClass().add("goal-achieved");
             } else {
                 content.getStyleClass().remove("goal-achieved");

@@ -1,6 +1,7 @@
 package com.umbell.repository;
 
 import com.umbell.models.Goal;
+import com.umbell.models.Account;
 import com.umbell.utils.DatabaseUtil;
 
 import java.sql.*;
@@ -100,13 +101,18 @@ public class GoalRepositoryImpl implements GoalRepository {
     @Override
     public List<Goal> findByUserId(Long userId) {
         List<Goal> goals = new ArrayList<>();
-        String sql = "SELECT g.* FROM Goal g JOIN Account a ON g.account_id = a.code WHERE a.user_email = ?";
+        String sql = "SELECT g.*, a.totalBalance FROM Goal g " +
+                    "JOIN Account a ON g.account_id = a.code " +
+                    "WHERE a.user_email = (SELECT email FROM User WHERE id = ?)";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    goals.add(mapResultSetToGoal(rs));
+                    Goal goal = mapResultSetToGoal(rs);
+                    // Atualiza o saldo total da conta
+                    goal.getAccount().setTotalBalance(rs.getBigDecimal("totalBalance"));
+                    goals.add(goal);
                 }
             }
         } catch (SQLException e) {
@@ -122,6 +128,12 @@ public class GoalRepositoryImpl implements GoalRepository {
         goal.setTargetAmount(rs.getDouble("target_amount"));
         goal.setCurrentAmount(rs.getDouble("current_amount"));
         goal.setAchieved(rs.getBoolean("achieved"));
+
+        // Carrega a conta associada à meta
+        Account account = new Account();
+        account.setCode(rs.getLong("account_id"));
+        goal.setAccount(account);
+
         return goal;
     }
 } 

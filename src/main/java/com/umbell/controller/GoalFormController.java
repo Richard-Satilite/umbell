@@ -24,6 +24,7 @@ public class GoalFormController {
     private Label errorLabel;
 
     private User user;
+    private Account account;
     private GoalService goalService;
     private AccountService accountService;
     private Consumer<Void> onGoalCreated;
@@ -36,6 +37,10 @@ public class GoalFormController {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public void setOnGoalCreated(Consumer<Void> onGoalCreated) {
@@ -66,13 +71,10 @@ public class GoalFormController {
             return;
         }
 
-        if (user.getAccounts().isEmpty()) {
-            errorLabel.setText("Você precisa ter pelo menos uma conta para criar uma meta.");
+        if (account == null) {
+            errorLabel.setText("Erro: conta não selecionada.");
             return;
         }
-
-        // For simplicity, associate with the first account. You might want a selection mechanism.
-        Account account = user.getAccounts().get(0);
 
         Goal newGoal = goalService.createGoal(title, targetAmount, account);
 

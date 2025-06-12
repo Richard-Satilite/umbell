@@ -53,7 +53,9 @@ public class GoalsController {
         } else {
             noGoalsLabel.setVisible(false);
             goalsListView.setVisible(true);
-            goalsListView.getItems().setAll(goals);
+            goalsListView.getItems().clear();
+            goalsListView.getItems().addAll(goals);
+            goalsListView.refresh();
         }
     }
     
@@ -65,6 +67,7 @@ public class GoalsController {
             
             GoalFormController controller = loader.getController();
             controller.setUser(user);
+            controller.setAccount(dashboardController.getCurrentAccount());
             controller.setOnGoalCreated(this::loadGoals);
             
             Stage stage = new Stage();
@@ -73,6 +76,8 @@ public class GoalsController {
             stage.setTitle("Nova Meta");
             stage.setScene(new javafx.scene.Scene(goalForm));
             stage.showAndWait();
+            
+            loadGoals(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
