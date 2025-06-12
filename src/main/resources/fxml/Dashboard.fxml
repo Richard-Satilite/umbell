@@ -30,6 +30,11 @@
                         <FontIcon fx:id="notificationIcon" iconLiteral="fas-bell" iconSize="20"/>
                     </graphic>
                 </Button>
+                <Button onAction="#handleLogout" styleClass="sidebar-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-arrow-left" iconSize="20"/>
+                    </graphic>
+                </Button>
             </children>
         </VBox>
     </left>

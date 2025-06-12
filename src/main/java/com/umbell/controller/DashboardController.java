@@ -8,6 +8,7 @@ import com.umbell.repository.NotificationRepository;
 import com.umbell.repository.NotificationRepositoryImpl;
 import com.umbell.service.AccountService;
 import com.umbell.service.MovementService;
+import com.umbell.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.List;
+import java.util.Optional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.scene.Scene;
@@ -27,6 +29,7 @@ import java.sql.Date;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.StageStyle;
 
 public class DashboardController {
     @FXML private Label greetingLabel;
@@ -260,5 +263,29 @@ public class DashboardController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleLogout() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sair");
+        alert.setHeaderText(null);
+        alert.setContentText("Deseja realmente sair?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Fecha a janela atual
+                Stage stage = (Stage) root.getScene().getWindow();
+                stage.close();
+                
+                // Inicia o App novamente
+                App app = new App();
+                app.start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erro", "Não foi possível voltar à tela inicial.");
+            }
+        }
     }
 } 
