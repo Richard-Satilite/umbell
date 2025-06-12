@@ -9,6 +9,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.umbell.controller.GoalsController"
+      fx:id="root"
       spacing="20"
       styleClass="goals-container">
     <padding>

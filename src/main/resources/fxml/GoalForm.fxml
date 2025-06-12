@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.umbell.controller.GoalFormController"
+      spacing="10"
+      style="-fx-background-color: white;">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="Nova Meta" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    
+    <GridPane vgap="10" hgap="10">
+        <Label text="Título:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        
+        <Label text="Valor Alvo (R$):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="targetAmountField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+    
+    <Label fx:id="errorLabel" style="-fx-text-fill: red;"/>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancelar" onAction="#onCancelClick" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+        <Button text="Criar Meta" onAction="#onCreateGoalClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    </HBox>
+    
+</VBox> 
