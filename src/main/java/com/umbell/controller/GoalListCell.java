@@ -25,6 +25,7 @@ public class GoalListCell extends ListCell<Goal> {
     private final NotificationRepository notificationRepository;
     private final GoalRepository goalRepository;
     private User user;
+    private DashboardController dashboardController;
 
     public GoalListCell() {
         content = new VBox();
@@ -53,6 +54,10 @@ public class GoalListCell extends ListCell<Goal> {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setDashboardController(DashboardController dashboardController) {
+        this.dashboardController = dashboardController;
     }
 
     @Override
@@ -94,6 +99,11 @@ public class GoalListCell extends ListCell<Goal> {
                     // Atualiza o status da meta no banco
                     goal.setAchieved(true);
                     goalRepository.update(goal);
+
+                    // Atualiza a UI do dashboard para mostrar a notificação
+                    if (dashboardController != null) {
+                        dashboardController.updateUI();
+                    }
                 }
             } else {
                 content.getStyleClass().remove("goal-achieved");

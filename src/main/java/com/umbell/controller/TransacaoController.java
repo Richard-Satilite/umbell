@@ -46,14 +46,8 @@ public class TransacaoController {
     @FXML
     private void handleSalvar() {
         try {
-            Integer addOrReduce = null;
             String tipo = tipoTransacaoCombo.getValue();
-            String descricao = descricaoField.getText();
-            BigDecimal valor = new BigDecimal(valorField.getText());
-            LocalDate data = dataField.getValue();
-            String observacao = observacaoField.getText();
-
-            if (tipo == null || descricao.isEmpty() || valor.compareTo(BigDecimal.ZERO) <= 0 || data == null) {
+            if (tipo == null || descricaoField.getText().isEmpty() || valorField.getText().isEmpty() || dataField.getValue() == null) {
                 showAlert("Erro", "Por favor, preencha todos os campos obrigatórios.");
                 return;
             }
@@ -66,6 +60,7 @@ public class TransacaoController {
             Movement movement = new Movement();
             movement.setAccount(currentAccount);
             
+            Integer addOrReduce = null;
             switch (tipo) {
                 case "Entrada":
                     movement.setType("Income");
@@ -73,7 +68,7 @@ public class TransacaoController {
                     break;
                 case "Gasto":                
                     movement.setType("Expense");
-                    addOrReduce = 0;
+                    addOrReduce = -1;
                     break;
                 case "Investimento":
                     movement.setType("Investment");
@@ -83,28 +78,28 @@ public class TransacaoController {
                     showAlert("Erro", "Tipo de transação inválido.");
                     return;
             }
-            movement.setDescription(descricao);
-            movement.setAmount(valor);
-            movement.setDate(data);
-            movement.setNotes(observacao);
+
+            movement.setDescription(descricaoField.getText());
+            movement.setAmount(new BigDecimal(valorField.getText()));
+            movement.setDate(dataField.getValue());
+            movement.setNotes(observacaoField.getText());
 
             movementService.save(movement);
-            
+
             if(addOrReduce != null){
                 if (addOrReduce == 1) {
-                    currentAccount.setTotalBalance(currentAccount.getTotalBalance().add(valor));
-                } else{
-                    currentAccount.setTotalBalance(currentAccount.getTotalBalance().subtract(valor));
+                    currentAccount.setTotalBalance(currentAccount.getTotalBalance().add(movement.getAmount()));
+                } else {
+                    currentAccount.setTotalBalance(currentAccount.getTotalBalance().subtract(movement.getAmount()));
                 }
             }
 
             accountService.updateAccount(currentAccount);
 
-            // Atualizar o dashboard
-            if (dashboardController != null) {
-                dashboardController.refreshData();
-            }
-            // Fechar o modal
+            // Atualiza a UI do dashboard
+            dashboardController.updateUI();
+
+            // Fecha a janela
             Stage stage = (Stage) descricaoField.getScene().getWindow();
             stage.close();
 
@@ -119,6 +114,14 @@ public class TransacaoController {
     private void handleCancelar() {
         Stage stage = (Stage) descricaoField.getScene().getWindow();
         stage.close();
+    }
+
+    private boolean validateInputs() {
+        if (tipoTransacaoCombo.getValue() == null || descricaoField.getText().isEmpty() || valorField.getText().isEmpty() || dataField.getValue() == null) {
+            showAlert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+            return false;
+        }
+        return true;
     }
 
     private void showAlert(String title, String content) {

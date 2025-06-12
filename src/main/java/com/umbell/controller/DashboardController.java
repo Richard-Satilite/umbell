@@ -42,6 +42,7 @@ public class DashboardController {
     @FXML private ListView<Notification> notificationsListView;
     @FXML private BorderPane root;
     @FXML private Label saldoLabel;
+    @FXML private Button notificationButton;
     
     private User user;
     private Account currentAccount;
@@ -57,11 +58,26 @@ public class DashboardController {
         movementService = new MovementService();
         accountService = new AccountService();
         refreshData();
+        checkUnreadNotifications();
+    }
+
+    private void checkUnreadNotifications() {
+        if (user != null) {
+            List<Notification> unreadNotifications = notificationRepository.findUnreadByUserEmail(user.getEmail());
+            if (!unreadNotifications.isEmpty()) {
+                notificationButton.getStyleClass().add("notification-unread");
+            } else {
+                notificationButton.getStyleClass().remove("notification-unread");
+            }
+        }
     }
 
     @FXML
     private void onNotificationButtonClick() {
         try {
+            // Marca todas as notificações como lidas
+            markAllNotificationsAsRead();
+            
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Notifications.fxml"));
             VBox notificationsView = loader.load();
             
@@ -70,10 +86,22 @@ public class DashboardController {
             controller.setUser(user);
             controller.setDashboardController(this);
             
+            // Remove o estilo de notificação não lida
+            notificationButton.getStyleClass().remove("notification-unread");
+            
             // Replace the center content
             root.setCenter(notificationsView);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void markAllNotificationsAsRead() {
+        if (user != null) {
+            List<Notification> unreadNotifications = notificationRepository.findUnreadByUserEmail(user.getEmail());
+            for (Notification notification : unreadNotifications) {
+                notificationRepository.markAsRead(notification.getId());
+            }
         }
     }
 
@@ -197,6 +225,9 @@ public class DashboardController {
                 summaryIncomeLabel.setText("+0.00");
                 summaryExpenseLabel.setText("-0.00");
             }
+
+            // Verifica notificações não lidas
+            checkUnreadNotifications();
         }
     }
 

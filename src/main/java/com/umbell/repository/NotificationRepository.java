@@ -12,4 +12,6 @@ public interface NotificationRepository {
     void update(Notification notification);
     void delete(Long id);
     void markAsRead(Long id);
+    List<Notification> findByUserEmail(String userEmail);
+    List<Notification> findUnreadByUserEmail(String userEmail);
 } 

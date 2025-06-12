@@ -144,6 +144,60 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         }
     }
 
+    @Override
+    public List<Notification> findUnreadByUserEmail(String userEmail) {
+        String sql = "SELECT * FROM Notification WHERE user_email = ? AND read = FALSE";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, userEmail);
+            ResultSet rs = stmt.executeQuery();
+            
+            List<Notification> notifications = new ArrayList<>();
+            while (rs.next()) {
+                Notification notification = new Notification(
+                    rs.getString("name"),
+                    rs.getString("message"),
+                    rs.getString("user_email")
+                );
+                notification.setId(rs.getLong("id"));
+                notification.setRead(rs.getBoolean("read"));
+                notifications.add(notification);
+            }
+            return notifications;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Notification> findByUserEmail(String userEmail) {
+        String sql = "SELECT * FROM Notification WHERE user_email = ?";
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, userEmail);
+            ResultSet rs = stmt.executeQuery();
+            
+            List<Notification> notifications = new ArrayList<>();
+            while (rs.next()) {
+                Notification notification = new Notification(
+                    rs.getString("name"),
+                    rs.getString("message"),
+                    rs.getString("user_email")
+                );
+                notification.setId(rs.getLong("id"));
+                notification.setRead(rs.getBoolean("read"));
+                notifications.add(notification);
+            }
+            return notifications;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     private Notification mapRowToNotification(ResultSet rs) throws SQLException {
         Notification notification = new Notification(
                 rs.getLong("id"),

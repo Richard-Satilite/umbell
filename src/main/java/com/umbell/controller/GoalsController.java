@@ -35,6 +35,7 @@ public class GoalsController {
         goalsListView.setCellFactory(lv -> {
             GoalListCell cell = new GoalListCell();
             cell.setUser(user);
+            cell.setDashboardController(dashboardController);
             return cell;
         });
     }

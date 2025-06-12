@@ -27,7 +27,7 @@
                 </Button>
                 <Button fx:id="notificationButton" onAction="#onNotificationButtonClick" styleClass="sidebar-btn">
                     <graphic>
-                        <FontIcon iconLiteral="fas-bell" iconSize="20"/>
+                        <FontIcon fx:id="notificationIcon" iconLiteral="fas-bell" iconSize="20"/>
                     </graphic>
                 </Button>
             </children>

@@ -1,0 +1,4 @@
+.notification-unread {
+    -fx-fill: #ff0000;
+    -fx-effect: dropshadow(gaussian, #ff0000, 5, 0.5, 0, 0);
+} 
