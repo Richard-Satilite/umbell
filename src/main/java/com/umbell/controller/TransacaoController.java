@@ -1,7 +1,13 @@
 package com.umbell.controller;
 
 import com.umbell.models.Movement;
+import com.umbell.models.Notification;
+import com.umbell.repository.GoalRepository;
+import com.umbell.repository.GoalRepositoryImpl;
+import com.umbell.repository.NotificationRepository;
+import com.umbell.repository.NotificationRepositoryImpl;
 import com.umbell.models.Account;
+import com.umbell.models.Goal;
 import com.umbell.service.AccountService;
 import com.umbell.service.MovementService;
 import javafx.fxml.FXML;
@@ -9,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class TransacaoController {
     @FXML private ComboBox<String> tipoTransacaoCombo;
@@ -96,6 +103,19 @@ public class TransacaoController {
 
             accountService.updateAccount(currentAccount);
 
+            // Se uma meta foi atinginda, então deve gerar uma nova notificação
+            if(verifyIfGoalIsAchieved()){
+                try {
+                    String message = "Com a movimentação de R$ %.2f, você atingiu uma ou mais metas!".formatted(movement.getAmount());
+                    Notification notification = new Notification("Meta atingida", message , currentAccount.getUserEmail());
+                    NotificationRepository notificationRepository = new NotificationRepositoryImpl();
+
+                    notificationRepository.save(notification);
+                } catch (Exception e) {
+                    System.out.println("Erro ao conectar com o notificationRepository: " + e);
+                }
+            }
+
             // Atualiza a UI do dashboard
             dashboardController.updateUI();
 
@@ -130,5 +150,24 @@ public class TransacaoController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private boolean verifyIfGoalIsAchieved(){
+        try {
+            GoalRepository goalRepository = new GoalRepositoryImpl();
+            List<Goal> goals = goalRepository.findByAccountId(currentAccount.getCode());
+
+            if(!goals.isEmpty()){
+
+                //Verifica se com a transação adicionada a conta atingiu uma meta ainda não atingida
+                for (Goal goal : goals)
+                    if(currentAccount.getTotalBalance().doubleValue() >= goal.getTargetAmount() && !goal.isAchieved())
+                        return true; 
+            }
+        } catch (Exception e) {
+            System.out.println("Problema ao se conectar ao goalRepository: " + e);
+        }
+
+        return false;
     }
 }

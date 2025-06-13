@@ -39,7 +39,7 @@ public class NotificationsController {
 
     private void loadNotifications() {
         if (user != null) {
-            List<Notification> notifications = notificationRepository.findByUserId(user.getId());
+            List<Notification> notifications = notificationRepository.findByUserEmail(user.getEmail());
             
             if (notifications.isEmpty()) {
                 noNotificationsLabel.setVisible(true);
