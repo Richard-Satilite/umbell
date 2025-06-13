@@ -37,7 +37,7 @@ public class AccountSelectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userService = new UserService(new UserRepositoryImpl());
+        userService = new UserService();
         setupAccountsListView();
     }
 
@@ -47,7 +47,7 @@ public class AccountSelectController implements Initializable {
      */
     public void setUser(User user) {
         this.user = user;
-        this.userService = new UserService(new UserRepositoryImpl());
+        this.userService = new UserService();
         updateWelcomeLabel();
         loadAccounts();
     }
@@ -64,8 +64,43 @@ public class AccountSelectController implements Initializable {
             if (event.getClickCount() == 2) {
                 Account selectedAccount = accountsListView.getSelectionModel().getSelectedItem();
                 if (selectedAccount != null) {
-                    // TODO: Implementar a navegação para a tela da conta selecionada
-                    System.out.println("Conta selecionada: " + selectedAccount.getCode());
+                    System.out.println("Conta selecionada: " + selectedAccount.getName());
+                    Stage currentStage = (Stage) root.getScene().getWindow();
+                    
+                    // Fecha a janela Base.fxml (janela principal)
+                    Stage baseStage = (Stage) currentStage.getOwner();
+                    if (baseStage != null) {
+                        baseStage.close();
+                        System.out.println("onCreateAccountClick: Base.fxml fechado.");
+                    }
+                    
+                    currentStage.close();
+                    
+                    // Abre o Dashboard.fxml e passa o usuário e a conta selecionada
+                    try {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("/fxml/Dashboard.fxml"));
+                        Parent dashboardRoot = loader.load();
+                        
+                        // Passa o usuário e a conta selecionada para o controller do dashboard
+                        Object controller = loader.getController();
+                        if (controller instanceof DashboardController) {
+                            DashboardController dashboardController = (DashboardController) controller;
+                            dashboardController.setUser(user);
+                            dashboardController.setCurrentAccount(selectedAccount);
+                            System.out.println("onCreateAccountClick: Usuário e conta passados para DashboardController.");
+                        }
+                        
+                        Stage dashboardStage = new Stage();
+                        dashboardStage.setTitle("Dashboard");
+                        dashboardStage.setScene(new Scene(dashboardRoot));
+                        dashboardStage.show();
+                        System.out.println("onCreateAccountClick: Dashboard.fxml aberto.");
+                    } catch (IOException e) {
+                        System.err.println("Erro ao carregar Dashboard.fxml: " + e.getMessage());
+                        e.printStackTrace();
+                        throw new RuntimeException("Erro ao carregar Dashboard.fxml", e);
+                    }
                 }
             }
         });

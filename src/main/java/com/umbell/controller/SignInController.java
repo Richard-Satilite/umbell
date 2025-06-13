@@ -44,7 +44,7 @@ public class SignInController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupEmailValidation();
-        userService = new UserService(new UserRepositoryImpl());
+        userService = new UserService();
     }
 
     private void setupEmailValidation() {

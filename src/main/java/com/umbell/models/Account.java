@@ -9,6 +9,7 @@ public class Account {
     private Long code;
     private BigDecimal totalBalance;
     private String userEmail;
+    private String name;
     private LocalDateTime createdAt;
     private List<Movement> movements;
     private List<Goal> goals;
@@ -20,9 +21,18 @@ public class Account {
         this.goals = new ArrayList<>();
     }
 
-    public Account(String userEmail) {
+    public Account(String userEmail, String name) {
         this();
         this.userEmail = userEmail;
+        this.name = name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public Long getCode() {

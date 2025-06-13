@@ -49,6 +49,7 @@ public class AccountNameController {
         // Cria a conta e associa ao usuário
         Account account = new Account();
         account.setUserEmail(user.getEmail());
+        account.setName(accountName);
         // Aqui você pode adicionar o nome da conta como um campo extra, se desejar
         // account.setName(accountName);
         

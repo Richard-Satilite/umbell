@@ -143,7 +143,8 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    private List<Account> loadUserAccounts(String userEmail) {
+    @Override
+    public List<Account> loadUserAccounts(String userEmail) {
         String sql = "SELECT * FROM Account WHERE user_email = ?";
         List<Account> accounts = new ArrayList<>();
         
@@ -156,6 +157,7 @@ public class UserRepositoryImpl implements UserRepository {
                 while (rs.next()) {
                     Account account = new Account();
                     account.setCode(rs.getLong("code"));
+                    account.setName(rs.getString("name"));
                     account.setTotalBalance(rs.getBigDecimal("totalBalance"));
                     account.setUserEmail(rs.getString("user_email"));
                     account.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());

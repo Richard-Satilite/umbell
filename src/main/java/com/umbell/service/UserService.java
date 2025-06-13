@@ -3,6 +3,7 @@ package com.umbell.service;
 import com.umbell.models.User;
 import com.umbell.models.Account;
 import com.umbell.repository.UserRepository;
+import com.umbell.repository.UserRepositoryImpl;
 import com.umbell.utils.HashUtil;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,8 +14,8 @@ public class UserService {
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MIN_NAME_LENGTH = 3;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService() {
+        this.userRepository = new UserRepositoryImpl();
     }
 
     /**
@@ -97,7 +98,7 @@ public class UserService {
         if (user == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");
         }
-        return user.getAccounts();
+        return userRepository.loadUserAccounts(user.getEmail());
     }
 
     /**

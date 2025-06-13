@@ -60,8 +60,6 @@ public class DashboardController {
         originalContent = (VBox) root.getCenter();
         movementService = new MovementService();
         accountService = new AccountService();
-        refreshData();
-        checkUnreadNotifications();
     }
 
     private void checkUnreadNotifications() {
@@ -175,14 +173,6 @@ public class DashboardController {
         DateTimeFormatter currentDateFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale.forLanguageTag("pt-BR"));
         dateLabel.setText(currDate.format(currentDateFormatter));
 
-        //Obtendo total de ganhos e despesas
-        BigDecimal incomes = accountService.getTotalIncomesByAccountId(currentAccount.getCode());
-        BigDecimal expenses = accountService.getTotalExpensesByAccountId(currentAccount.getCode());
-
-        // Garantir que os valores não sejam nulos
-        if (incomes == null) incomes = BigDecimal.ZERO;
-        if (expenses == null) expenses = BigDecimal.ZERO;
-
         // Restaurando conteudo original
         root.setCenter(originalContent);
         
@@ -200,15 +190,22 @@ public class DashboardController {
                 balanceValueLabel.setText(formattedBalance);
                 System.out.println("DashboardController: Saldo atualizado para: " + formattedBalance);
                 
-                // Set income and expense to 0 for now
-                // TODO: Implement actual income and expense calculation
+                // Obtendo total de ganhos e despesas
+                BigDecimal incomes = accountService.getTotalIncomesByAccountId(currentAccount.getCode());
+                BigDecimal expenses = accountService.getTotalExpensesByAccountId(currentAccount.getCode());
+
+                // Garantir que os valores não sejam nulos
+                if (incomes == null) incomes = BigDecimal.ZERO;
+                if (expenses == null) expenses = BigDecimal.ZERO;
+                
+                // Set income and expense
                 incomeLabel.setText(String.format("+%.2f", incomes.doubleValue()));
                 expenseLabel.setText(String.format("-%.2f", expenses.doubleValue()));
                 summaryIncomeLabel.setText(String.format("+%.2f", incomes.doubleValue()));
                 summaryExpenseLabel.setText(String.format("-%.2f", expenses.doubleValue()));
 
                 // Load and display movements
-                List<Movement> movements = currentAccount.getMovements();
+                List<Movement> movements = movementService.findByAccountId(currentAccount.getCode());
                 if (movements != null && !movements.isEmpty()) {
                     movementsListView.getItems().setAll(movements);
                     movementsListView.setCellFactory(lv -> new MovementListCell()); // Set custom cell factory
@@ -287,5 +284,12 @@ public class DashboardController {
                 showAlert("Erro", "Não foi possível voltar à tela inicial.");
             }
         }
+    }
+
+    public void setCurrentAccount(Account account) {
+        this.currentAccount = account;
+        System.out.println("DashboardController: Conta atual definida como: " + (account != null ? account.getName() : "null"));
+        refreshData(); // Agora é seguro chamar refreshData
+        updateUI();
     }
 } 

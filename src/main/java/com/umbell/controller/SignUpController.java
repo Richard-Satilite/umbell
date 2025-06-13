@@ -56,7 +56,7 @@ public class SignUpController implements Initializable {
         setupNameValidation();
         setupEmailValidation();
         setupPasswordValidation();
-        userService = new UserService(new UserRepositoryImpl());
+        userService = new UserService();
     }
 
     private void setupNameValidation() {

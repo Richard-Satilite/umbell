@@ -36,7 +36,7 @@ public class AccountListCell extends ListCell<Account> {
             setText(null);
             setGraphic(null);
         } else {
-            codeLabel.setText("Conta: " + account.getCode());
+            codeLabel.setText("Conta: " + account.getName());
             
             // Formata o saldo como moeda
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));

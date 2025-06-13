@@ -11,11 +11,12 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Account save(Account account) {
-        String sql = "INSERT INTO Account (totalBalance, user_email) VALUES (?, ?)";
+        String sql = "INSERT INTO Account (name, totalBalance, user_email) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseUtil.connect();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setBigDecimal(1, account.getTotalBalance());
-            stmt.setString(2, account.getUserEmail());
+            stmt.setString(1, account.getName());
+            stmt.setBigDecimal(2, account.getTotalBalance());
+            stmt.setString(3, account.getUserEmail());
             
             stmt.executeUpdate();
             

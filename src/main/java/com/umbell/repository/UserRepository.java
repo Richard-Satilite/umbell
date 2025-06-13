@@ -1,5 +1,6 @@
 package com.umbell.repository;
 
+import com.umbell.models.Account;
 import com.umbell.models.User;
 import java.util.List;
 import java.util.Optional;
@@ -53,4 +54,7 @@ public interface UserRepository {
      * @return true se o email já existe, false caso contrário
      */
     boolean existsByEmail(String email);
+
+
+    List<Account> loadUserAccounts(String email);
 } 
