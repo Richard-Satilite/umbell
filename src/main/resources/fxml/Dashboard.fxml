@@ -99,7 +99,6 @@
                                             </children>
                                         </VBox>
                                         <Pane VBox.vgrow="ALWAYS"/>
-                                        <Label text="Gerar relatório" styleClass="generate-report"/>
                                     </children>
                                 </HBox>
                                 <!-- Placeholder for chart -->

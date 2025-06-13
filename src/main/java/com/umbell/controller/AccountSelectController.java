@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AccountSelectController implements Initializable {
@@ -31,6 +32,9 @@ public class AccountSelectController implements Initializable {
 
     @FXML
     private ListView<Account> accountsListView;
+
+    @FXML
+    private Button createAccountButton;
 
     private User user;
     private UserService userService;
@@ -63,6 +67,7 @@ public class AccountSelectController implements Initializable {
         accountsListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Account selectedAccount = accountsListView.getSelectionModel().getSelectedItem();
+
                 if (selectedAccount != null) {
                     System.out.println("Conta selecionada: " + selectedAccount.getName());
                     Stage currentStage = (Stage) root.getScene().getWindow();
@@ -125,7 +130,47 @@ public class AccountSelectController implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else{
+                createAccountButton.setVisible(true);
             }
+        }
+    }
+
+    @FXML
+    private void onCreateAccountClick(){
+        try {
+            // Carrega o FXML do AccountName
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AccountName.fxml"));
+            Parent accountNameRoot = loader.load();
+
+            // Obtém o controller do AccountName.fxml e passa o usuário
+            AccountNameController accountNameController = loader.getController();
+            accountNameController.setUser(this.user);
+            System.out.println("onCardClick: Usuário passado para AccountNameController.");
+            
+            // Cria uma nova janela modal para AccountName
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(root.getScene().getWindow()); // Define o owner da janela modal
+            stage.setTitle("Nova Conta");
+            
+            Scene scene = new Scene(accountNameRoot);
+            stage.setScene(scene);
+            
+            // Centraliza a janela em relação à janela principal
+            Stage mainStage = (Stage) root.getScene().getWindow();
+            stage.setX(mainStage.getX() + (mainStage.getWidth() - scene.getWidth()) / 2);
+            stage.setY(mainStage.getY() + (mainStage.getHeight() - scene.getHeight()) / 2);
+            
+            stage.showAndWait();
+            System.out.println("onCardClick: Modal AccountName fechado.");
+
+        } catch (IOException e) {
+            System.err.println("onCardClick: Erro de IO ao carregar AccountName.fxml: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("onCardClick: Erro inesperado ao abrir modal de conta: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 } 
