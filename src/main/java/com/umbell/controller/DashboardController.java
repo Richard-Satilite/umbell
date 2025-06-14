@@ -30,7 +30,17 @@ import java.sql.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.StageStyle;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 
+/**
+ * Controlador responsável pelo dashboard principal da aplicação.
+ * Gerencia a exibição de informações da conta, movimentações e gráficos.
+ * 
+ * @author Richard Satilite
+ */
 public class DashboardController {
     @FXML private Label greetingLabel;
     @FXML private Label dateLabel;
@@ -54,6 +64,9 @@ public class DashboardController {
     private MovementService movementService;
     private AccountService accountService;
 
+    /**
+     * Inicializa o controlador e configura as listas e eventos.
+     */
     @FXML
     public void initialize() {
         notificationRepository = new NotificationRepositoryImpl();
@@ -61,6 +74,7 @@ public class DashboardController {
         movementService = new MovementService();
         accountService = new AccountService();
     }
+
 
     private void checkUnreadNotifications() {
         if (user != null) {
@@ -82,7 +96,6 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Notifications.fxml"));
             VBox notificationsView = loader.load();
             
-            // Get the controller and set the user and dashboard controller
             NotificationsController controller = loader.getController();
             controller.setUser(user);
             controller.setDashboardController(this);
@@ -90,7 +103,6 @@ public class DashboardController {
             // Remove o estilo de notificação não lida
             notificationButton.getStyleClass().remove("notification-unread");
             
-            // Replace the center content
             root.setCenter(notificationsView);
         } catch (IOException e) {
             e.printStackTrace();
@@ -149,6 +161,11 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Define o usuário atual e atualiza a interface.
+     * 
+     * @param user O usuário a ser definido
+     */
     public void setUser(User user) {
         this.user = user;
         System.out.println("DashboardController: setUser chamado com usuário: " + (user != null ? user.getEmail() : "null"));
@@ -286,6 +303,11 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Define a conta atual e atualiza a interface.
+     * 
+     * @param account A conta a ser definida
+     */
     public void setCurrentAccount(Account account) {
         this.currentAccount = account;
         System.out.println("DashboardController: Conta atual definida como: " + (account != null ? account.getName() : "null"));

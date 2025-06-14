@@ -22,6 +22,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.io.IOException;
 
+/**
+ * Controlador responsável pela tela de login.
+ * Gerencia a autenticação do usuário e validação dos campos.
+ * 
+ * @author Richard Satilite
+ */
 public class SignInController implements Initializable {
 
     @FXML
@@ -41,12 +47,22 @@ public class SignInController implements Initializable {
 
     private UserService userService;
 
+    /**
+     * Inicializa o controlador e configura as validações dos campos.
+     * 
+     * @param location Localização usada para resolver caminhos relativos
+     * @param resources Recursos usados para localizar o objeto raiz
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupEmailValidation();
         userService = new UserService();
     }
 
+    /**
+     * Configura a validação do campo de email.
+     * Valida o email quando o campo perde o foco.
+     */
     private void setupEmailValidation() {
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
@@ -55,6 +71,11 @@ public class SignInController implements Initializable {
         });
     }
 
+    /**
+     * Valida o formato do email.
+     * 
+     * @return true se o email for válido, false caso contrário
+     */
     private boolean validateEmail() {
         String email = emailField.getText();
         boolean isValid = ValidUtils.isValidEmail(email);
@@ -77,6 +98,11 @@ public class SignInController implements Initializable {
         }
     }
 
+
+    /**
+     * Manipula o evento de clique no botão de login.
+     * Valida os campos e tenta autenticar o usuário.
+     */
     @FXML
     private void onLoginClick(ActionEvent event) {
         // Limpa mensagens de erro anteriores

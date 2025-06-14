@@ -16,6 +16,12 @@ import javafx.scene.layout.HBox;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Célula personalizada para exibir metas em uma ListView.
+ * Gerencia a apresentação visual de uma meta individual na lista de metas.
+ * 
+ * @author Richard Satilite
+ */
 public class GoalListCell extends ListCell<Goal> {
     private final VBox content;
     private final Label titleLabel;
@@ -27,6 +33,10 @@ public class GoalListCell extends ListCell<Goal> {
     private User user;
     private DashboardController dashboardController;
 
+    /**
+     * Construtor da célula.
+     * Inicializa os componentes visuais e configura o estilo da célula.
+     */
     public GoalListCell() {
         content = new VBox();
         content.setSpacing(5);
@@ -52,14 +62,31 @@ public class GoalListCell extends ListCell<Goal> {
         goalRepository = new GoalRepositoryImpl();
     }
 
+    /**
+     * Define o usuário atual.
+     * 
+     * @param user O usuário que está visualizando as metas
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * Define o controlador do dashboard para atualização após ações.
+     * 
+     * @param dashboardController O controlador do dashboard
+     */
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
 
+    /**
+     * Atualiza o conteúdo da célula com os dados da meta.
+     * Verifica se a meta foi atingida e cria notificações quando necessário.
+     * 
+     * @param goal A meta a ser exibida
+     * @param empty Indica se a célula está vazia
+     */
     @Override
     protected void updateItem(Goal goal, boolean empty) {
         super.updateItem(goal, empty);

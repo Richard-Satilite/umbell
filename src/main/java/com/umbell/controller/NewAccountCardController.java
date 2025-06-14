@@ -9,8 +9,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
 import java.io.IOException;
-import java.net.URL;
 
+/**
+ * Controlador responsável pelo card de criação de nova conta.
+ * Gerencia a interface de criação da primeira conta do usuário.
+ * 
+ * @author Richard Satilite
+ */
 public class NewAccountCardController {
     
     @FXML
@@ -18,11 +23,20 @@ public class NewAccountCardController {
     
     private User user;
 
+    /**
+     * Define o usuário atual que está criando a conta.
+     * 
+     * @param user O usuário que está criando a conta
+     */
     public void setUser(User user) {
         this.user = user;
         System.out.println("NewAccountCardController: Usuário definido como: " + (user != null ? user.getEmail() : "null"));
     }
 
+    /**
+     * Manipula o evento de clique no card.
+     * Abre uma nova janela para criar a primeira conta.
+     */
     @FXML
     private void onCardClick() {
         System.out.println("onCardClick: Card clicado. Abrindo modal AccountName...");

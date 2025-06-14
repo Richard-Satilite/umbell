@@ -11,7 +11,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
+/**
+ * Controlador base responsável pela tela principal da aplicação.
+ * Gerencia a navegação entre as diferentes telas do sistema.
+ * 
+ * @author Richard Satilite
+ */
 public class BaseController implements Initializable {
 
     @FXML
@@ -49,6 +57,50 @@ public class BaseController implements Initializable {
             controller.setUser(user);
             
             contentArea.getChildren().setAll(accountSelect);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Manipula o evento de clique no botão de login.
+     * Abre a tela de login.
+     */
+    @FXML
+    private void onSignInClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SignIn.fxml"));
+            Parent signInRoot = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Login");
+            stage.setScene(new Scene(signInRoot));
+            stage.show();
+
+            // Fecha a janela atual
+            ((Stage) contentArea.getScene().getWindow()).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Manipula o evento de clique no botão de cadastro.
+     * Abre a tela de cadastro.
+     */
+    @FXML
+    private void onSignUpClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SignUp.fxml"));
+            Parent signUpRoot = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Cadastro");
+            stage.setScene(new Scene(signUpRoot));
+            stage.show();
+
+            // Fecha a janela atual
+            ((Stage) contentArea.getScene().getWindow()).close();
         } catch (IOException e) {
             e.printStackTrace();
         }

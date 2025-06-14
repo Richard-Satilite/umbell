@@ -17,6 +17,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Controlador responsável pela tela de transações.
+ * Gerencia a exibição e interação com a lista de transações do usuário.
+ *
+ * @author Richard Satilite
+ */
 public class TransacaoController {
     @FXML private ComboBox<String> tipoTransacaoCombo;
     @FXML private TextField descricaoField;
@@ -29,6 +35,9 @@ public class TransacaoController {
     private Account currentAccount;
     private AccountService accountService;
 
+    /**
+     * Inicializa o controlador e configura os componentes.
+     */
     @FXML
     public void initialize() {
         movementService = new MovementService();
@@ -43,6 +52,11 @@ public class TransacaoController {
         });
     }
 
+    /**
+     * Define o usuário atual e carrega suas transações.
+     *
+     * @param user O usuário que está visualizando as transações
+     */
     public void setDashboardController(DashboardController controller) {
         this.dashboardController = controller;
         if (controller != null) {

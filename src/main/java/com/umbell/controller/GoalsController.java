@@ -15,6 +15,12 @@ import com.umbell.controller.GoalFormController;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Controlador responsável pela tela de metas.
+ * Gerencia a exibição e interação com a lista de metas do usuário.
+ * 
+ * @author Richard Satilite
+ */
 public class GoalsController {
     @FXML
     private Label noGoalsLabel;
@@ -29,6 +35,9 @@ public class GoalsController {
     private GoalService goalService;
     private DashboardController dashboardController;
     
+    /**
+     * Inicializa o controlador e configura os componentes.
+     */
     @FXML
     public void initialize() {
         goalService = new GoalService();
@@ -40,15 +49,30 @@ public class GoalsController {
         });
     }
     
+    /**
+     * Define o usuário atual e carrega suas metas.
+     * 
+     * @param user O usuário que está visualizando as metas
+     */
     public void setUser(User user) {
         this.user = user;
         loadGoals(null);
     }
     
+    /**
+     * Define o controlador do dashboard para atualização após ações.
+     * 
+     * @param dashboardController O controlador do dashboard
+     */
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
     
+    /**
+     * Carrega a lista de metas do usuário.
+     * 
+     * @param v Parâmetro não utilizado, mantido para compatibilidade com o callback
+     */
     private void loadGoals(Void v) {
         List<Goal> goals = goalService.findByUserId(user.getId());
         
@@ -64,6 +88,10 @@ public class GoalsController {
         }
     }
     
+    /**
+     * Manipula o evento de clique no botão de adicionar meta.
+     * Abre o formulário de criação de meta.
+     */
     @FXML
     private void onAddGoalClick() {
         try {
@@ -88,6 +116,10 @@ public class GoalsController {
         }
     }
     
+    /**
+     * Manipula o evento de clique no botão de voltar ao dashboard.
+     * Atualiza a interface do dashboard.
+     */
     @FXML
     private void onBackToDashboardClick() {
         dashboardController.updateUI();

@@ -8,8 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementação da interface NotificationRepository.
+ * Esta classe fornece a implementação concreta dos métodos definidos na interface NotificationRepository,
+ * realizando operações de persistência para notificações no banco de dados.
+ *
+ * @author Richard Satilite
+ */
 public class NotificationRepositoryImpl implements NotificationRepository {
 
+    /**
+     * Salva uma nova notificação.
+     *
+     * @param notification a notificação a ser salva
+     */
     @Override
     public Notification save(Notification notification) {
         String sql = "INSERT INTO Notification (name, message, read, user_email) VALUES (?, ?, ?, ?)";
@@ -40,6 +52,12 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         return notification;
     }
 
+    /**
+     * Busca uma notificação pelo seu ID.
+     *
+     * @param id o identificador da notificação
+     * @return a notificação correspondente, ou {@code null} se não encontrada
+     */
     @Override
     public Optional<Notification> findById(Long id) {
         String sql = "SELECT * FROM Notification WHERE id = ?";
@@ -58,6 +76,12 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         return Optional.empty();
     }
 
+    /**
+     * Retorna todas as notificações associadas a um usuário.
+     *
+     * @param userId o identificador do usuário
+     * @return uma lista de notificações do usuário
+     */
     @Override
     public List<Notification> findByUserId(Long userId) {
         List<Notification> notifications = new ArrayList<>();
@@ -100,6 +124,11 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         return notifications;
     }
 
+    /**
+     * Atualiza uma notificação existente.
+     *
+     * @param notification a notificação com os dados atualizados
+     */
     @Override
     public void update(Notification notification) {
         String sql = "UPDATE Notification SET name = ?, message = ?, read = ?, user_email = ? WHERE id = ?";
@@ -118,6 +147,11 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         }
     }
 
+    /**
+     * Remove uma notificação com base no ID.
+     *
+     * @param id o identificador da notificação a ser removida
+     */
     @Override
     public void delete(Long id) {
         String sql = "DELETE FROM Notification WHERE id = ?";
@@ -198,6 +232,13 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         }
     }
 
+    /**
+     * Converte um ResultSet em um objeto Notification.
+     *
+     * @param rs O ResultSet contendo os dados da notificação
+     * @return Um objeto Notification preenchido com os dados do ResultSet
+     * @throws SQLException Se ocorrer um erro ao acessar os dados do ResultSet
+     */
     private Notification mapRowToNotification(ResultSet rs) throws SQLException {
         Notification notification = new Notification(
                 rs.getLong("id"),

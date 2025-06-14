@@ -22,6 +22,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Controlador responsável pela seleção e gerenciamento de contas do usuário.
+ * 
+ * @author Richard Satilite
+ */
 public class AccountSelectController implements Initializable {
 
     @FXML
@@ -39,6 +44,12 @@ public class AccountSelectController implements Initializable {
     private User user;
     private UserService userService;
 
+    /**
+     * Inicializa o controlador e configura a célula personalizada para a lista de contas.
+     * 
+     * @param location Localização usada para resolver caminhos relativos
+     * @param resources Recursos usados para localizar o objeto raiz
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         userService = new UserService();
@@ -46,8 +57,9 @@ public class AccountSelectController implements Initializable {
     }
 
     /**
-     * Define o usuário logado no sistema
-     * @param user O usuário que fez login/registro
+     * Define o usuário atual e atualiza a interface.
+     * 
+     * @param user O usuário a ser definido
      */
     public void setUser(User user) {
         this.user = user;
@@ -111,6 +123,10 @@ public class AccountSelectController implements Initializable {
         });
     }
 
+    /**
+     * Carrega as contas do usuário atual e configura a interface apropriadamente.
+     * Se o usuário não tiver contas, mostra o card de nova conta.
+     */
     private void loadAccounts() {
         if (user != null) {
             List<Account> accounts = userService.getUserAccounts(user);
@@ -119,6 +135,7 @@ public class AccountSelectController implements Initializable {
             // Se não houver contas, mostra o card de nova conta
             if (accounts.isEmpty()) {
                 try {
+                    createAccountButton.setVisible(false);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NewAccountCard.fxml"));
                     Parent newAccountCard = loader.load();
                     
@@ -136,6 +153,10 @@ public class AccountSelectController implements Initializable {
         }
     }
 
+    /**
+     * Manipula o evento de clique no botão de criar nova conta.
+     * Abre uma nova janela para criar uma conta.
+     */
     @FXML
     private void onCreateAccountClick(){
         try {

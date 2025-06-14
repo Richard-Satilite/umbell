@@ -13,6 +13,12 @@ import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+/**
+ * Célula personalizada para exibir movimentos em uma ListView.
+ * Gerencia a apresentação visual de um movimento individual na lista de movimentos.
+ *
+ * @author Richard Satilite
+ */
 public class MovementListCell extends ListCell<Movement> {
     private HBox content;
     private Label descriptionLabel;
@@ -46,6 +52,12 @@ public class MovementListCell extends ListCell<Movement> {
         content.getChildren().addAll(leftVBox, valueLabel, dateLabel);
     }
 
+    /**
+     * Atualiza o conteúdo da célula com os dados do movimento.
+     *
+     * @param movement O movimento a ser exibido
+     * @param empty Indica se a célula está vazia
+     */
     @Override
     protected void updateItem(Movement movement, boolean empty) {
         super.updateItem(movement, empty);

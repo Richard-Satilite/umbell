@@ -3,6 +3,12 @@ package com.umbell.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Representa uma categoria de investimentos no sistema.
+ * Esta classe estende a classe Category e é específica para categorias de investimentos.
+ *
+ * @author Richard Satilite
+ */
 public class Investment extends Category {
     private BigDecimal currentValue;
     private BigDecimal expectReturn;
@@ -10,9 +16,22 @@ public class Investment extends Category {
     private String institution;
     private String investmentType;
 
+    /**
+     * Construtor padrão para a categoria de investimentos.
+     */
     public Investment() {
         super();
         setCategoryType("Investment");
+    }
+
+    /**
+     * Construtor para criar uma categoria de investimentos com nome e limite mensal.
+     *
+     * @param name O nome da categoria de investimentos
+     * @param monthLimit O limite mensal para a categoria de investimentos
+     */
+    public Investment(String name, BigDecimal monthLimit) {
+        super(name, monthLimit, "Investment");
     }
 
     public Investment(String name, BigDecimal currentValue, BigDecimal expectReturn, LocalDate maturityDate, String institution, String investmentType) {

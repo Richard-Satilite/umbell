@@ -3,12 +3,21 @@ package com.umbell.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utilitário para geração e verificação de hashes MD5 de senhas.
+ * Fornece métodos para gerar o hash MD5 de uma senha em texto plano
+ * e para verificar se uma senha corresponde a um hash armazenado.
+ * 
+ * @author Richard Satilite
+ */
 public class HashUtil {
     
     /**
-     * Gera um hash MD5 da senha
-     * @param password A senha em texto plano
-     * @return O hash da senha em hexadecimal
+     * Gera um hash MD5 da senha fornecida.
+     * 
+     * @param password A senha em texto plano que será hasheada.
+     * @return Uma string hexadecimal representando o hash MD5 da senha.
+     * @throws RuntimeException caso o algoritmo MD5 não seja suportado pelo ambiente.
      */
     public static String hashPassword(String password) {
         try {
@@ -32,13 +41,14 @@ public class HashUtil {
     }
 
     /**
-     * Verifica se uma senha corresponde ao hash armazenado
-     * @param password A senha em texto plano para verificar
-     * @param hashedPassword O hash armazenado
-     * @return true se a senha corresponder ao hash, false caso contrário
+     * Verifica se uma senha em texto plano corresponde ao hash MD5 armazenado.
+     * 
+     * @param password A senha em texto plano para verificar.
+     * @param hashedPassword O hash MD5 armazenado para comparação.
+     * @return {@code true} se a senha gerada corresponder ao hash armazenado, {@code false} caso contrário.
      */
     public static boolean checkPassword(String password, String hashedPassword) {
         String hashedInput = hashPassword(password);
         return hashedInput.equals(hashedPassword);
     }
-} 
+}

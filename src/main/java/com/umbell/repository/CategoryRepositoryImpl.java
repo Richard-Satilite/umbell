@@ -11,8 +11,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementação da interface CategoryRepository.
+ * Esta classe fornece a implementação concreta dos métodos definidos na interface CategoryRepository,
+ * realizando operações de persistência para categorias no banco de dados.
+ *
+ * @author Richard Satilite
+ */
 public class CategoryRepositoryImpl implements CategoryRepository {
 
+    /**
+     * Salva uma nova categoria no banco de dados.
+     *
+     * @param category A categoria a ser salva
+     * @return A categoria salva com seu código gerado
+     */
     @Override
     public Category save(Category category) {
         String sql = "INSERT INTO Category (name, monthLimit, categoryType) VALUES (?, ?, ?)";
@@ -39,6 +52,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
+    /**
+     * Atualiza uma categoria existente no banco de dados.
+     *
+     * @param category A categoria a ser atualizada
+     */
     @Override
     public void update(Category category) {
         String sql = "UPDATE Category SET name = ?, monthLimit = ?, categoryType = ? WHERE id = ?";
@@ -59,6 +77,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
+    /**
+     * Exclui uma categoria do banco de dados.
+     *
+     * @param id O código da categoria
+     */
     @Override
     public void delete(Long id) {
         String sql = "DELETE FROM Category WHERE id = ?";
@@ -71,6 +94,12 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
+    /**
+     * Busca uma categoria pelo seu código.
+     *
+     * @param id O código da categoria
+     * @return A categoria encontrada, ou null se não existir
+     */
     @Override
     public Category findById(Long id) {
         String sql = "SELECT * FROM Category WHERE id = ?";
@@ -88,6 +117,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         return null;
     }
 
+    /**
+     * Busca todas as categorias no banco de dados.
+     *
+     * @return Uma lista de todas as categorias
+     */
     @Override
     public List<Category> findAll() {
         List<Category> categories = new ArrayList<>();

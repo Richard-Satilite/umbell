@@ -4,6 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa um usuário no sistema.
+ * Esta classe armazena informações sobre um usuário, incluindo seu código, nome, e-mail, senha e data de criação.
+ *
+ * @author Richard Satilite
+ */
 public class User {
     private Long id;
     private String name;
@@ -25,10 +31,20 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Obtém o código do usuário.
+     *
+     * @return O código do usuário
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Define o código do usuário.
+     *
+     * @param id O código do usuário
+     */
     public void setId(Long id) {
         this.id = id;
     }

@@ -9,12 +9,23 @@ import javafx.geometry.Insets;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
 
+/**
+ * Célula personalizada para exibição de contas na lista.
+ * Gerencia a apresentação visual de cada item de conta.
+ * 
+ * @author Richard Satilite
+ */
 public class AccountListCell extends ListCell<Account> {
     private HBox content;
     private Label codeLabel;
     private Label balanceLabel;
 
+    /**
+     * Construtor padrão que carrega o layout da célula.
+     */
     public AccountListCell() {
         super();
         content = new HBox();
@@ -28,6 +39,12 @@ public class AccountListCell extends ListCell<Account> {
         content.getChildren().addAll(codeLabel, balanceLabel);
     }
 
+    /**
+     * Atualiza o conteúdo da célula com os dados da conta.
+     * 
+     * @param account A conta a ser exibida
+     * @param empty Indica se a célula está vazia
+     */
     @Override
     protected void updateItem(Account account, boolean empty) {
         super.updateItem(account, empty);

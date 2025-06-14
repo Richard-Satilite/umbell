@@ -22,6 +22,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.io.IOException;
 
+/**
+ * Controlador responsável pela tela de cadastro de usuário.
+ * Gerencia o registro de novos usuários e validação dos campos.
+ * 
+ * @author Richard Satilite
+ */
 public class SignUpController implements Initializable {
 
     @FXML
@@ -51,6 +57,12 @@ public class SignUpController implements Initializable {
 
     private UserService userService;
 
+    /**
+     * Inicializa o controlador e configura as validações dos campos.
+     * 
+     * @param location Localização usada para resolver caminhos relativos
+     * @param resources Recursos usados para localizar o objeto raiz
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupNameValidation();
@@ -59,6 +71,10 @@ public class SignUpController implements Initializable {
         userService = new UserService();
     }
 
+    /**
+     * Configura a validação do campo de nome.
+     * Valida o nome quando o campo perde o foco.
+     */
     private void setupNameValidation() {
         nameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
@@ -67,6 +83,10 @@ public class SignUpController implements Initializable {
         });
     }
 
+    /**
+     * Configura a validação do campo de email.
+     * Valida o email quando o campo perde o foco.
+     */
     private void setupEmailValidation() {
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
@@ -75,6 +95,10 @@ public class SignUpController implements Initializable {
         });
     }
 
+    /**
+     * Configura a validação do campo de senha.
+     * Valida a senha quando o campo perde o foco.
+     */
     private void setupPasswordValidation() {
         passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
@@ -83,6 +107,11 @@ public class SignUpController implements Initializable {
         });
     }
 
+    /**
+     * Valida o nome do usuário.
+     * 
+     * @return true se o nome for válido, false caso contrário
+     */
     private boolean validateName() {
         String name = nameField.getText();
         boolean isValid = name.trim().split("\\s+").length >= 2;
@@ -105,6 +134,12 @@ public class SignUpController implements Initializable {
         }
     }
 
+
+    /**
+     * Valida o formato do email.
+     * 
+     * @return true se o email for válido, false caso contrário
+     */
     private boolean validateEmail() {
         String email = emailField.getText();
         boolean isValid = ValidUtils.isValidEmail(email);
@@ -127,6 +162,11 @@ public class SignUpController implements Initializable {
         }
     }
 
+    /**
+     * Valida a senha do usuário.
+     * 
+     * @return true se a senha for válida, false caso contrário
+     */
     private boolean validatePassword() {
         String password = passwordField.getText();
         
@@ -148,6 +188,10 @@ public class SignUpController implements Initializable {
         }
     }
 
+    /**
+     * Manipula o evento de clique no botão de cadastro.
+     * Valida os campos e tenta registrar o novo usuário.
+     */
     @FXML
     private void onSignUpClick(ActionEvent event) {
         String name = nameField.getText();
@@ -197,7 +241,7 @@ public class SignUpController implements Initializable {
             errorLabel.setText("Erro de validação: " + e.getMessage());
         } catch (RuntimeException e) {
             errorLabel.setText("Erro ao registrar: " + e.getMessage());
-            e.printStackTrace(); // Para debug
+            e.printStackTrace();
         }
     }
 

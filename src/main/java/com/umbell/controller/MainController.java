@@ -16,6 +16,12 @@ import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * Controlador principal da aplicação.
+ * Gerencia a navegação entre as telas de login e registro.
+ *
+ * @author Richard Satilite
+ */
 public class MainController implements Initializable {
 
     @FXML
@@ -23,6 +29,10 @@ public class MainController implements Initializable {
     private Parent fxml;
     private User user;
 
+    /**
+     * Inicializa o controlador e configura a animação inicial.
+     * Carrega a tela de login após a animação.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         TranslateTransition t = new TranslateTransition(Duration.seconds(1), vbox);
@@ -43,6 +53,12 @@ public class MainController implements Initializable {
         System.out.println("Usuário logado: " + user.getName());
     }
 
+    /**
+     * Manipula o evento de clique no botão de login.
+     * Abre a tela de login com animação.
+     *
+     * @param event O evento de clique
+     */
     @FXML
     private void openSignIn(ActionEvent event) {
         TranslateTransition t = new TranslateTransition(Duration.seconds(1), vbox);
@@ -53,6 +69,12 @@ public class MainController implements Initializable {
         });
     }
 
+    /**
+     * Manipula o evento de clique no botão de registro.
+     * Abre a tela de registro com animação.
+     *
+     * @param event O evento de clique
+     */
     @FXML
     private void openSignUp(ActionEvent event) {
         TranslateTransition t = new TranslateTransition(Duration.seconds(1), vbox);
@@ -63,6 +85,11 @@ public class MainController implements Initializable {
         });
     }
 
+    /**
+     * Carrega um arquivo FXML com efeito de fade.
+     *
+     * @param fxmlPath O caminho do arquivo FXML a ser carregado
+     */
     private void loadFXMLWithFade(String fxmlPath) {
         try {
             fxml = FXMLLoader.load(getClass().getResource(fxmlPath));

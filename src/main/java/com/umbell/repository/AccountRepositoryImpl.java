@@ -7,8 +7,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementação da interface AccountRepository.
+ * Esta classe fornece a implementação concreta dos métodos definidos na interface AccountRepository,
+ * realizando operações de persistência para contas bancárias no banco de dados.
+ *
+ * @author Richard Satilite
+ */
 public class AccountRepositoryImpl implements AccountRepository {
 
+    /**
+     * Salva uma nova conta no banco de dados.
+     *
+     * @param account A conta a ser salva
+     * @return A conta salva com seu código gerado
+     */
     @Override
     public Account save(Account account) {
         String sql = "INSERT INTO Account (name, totalBalance, user_email) VALUES (?, ?, ?)";
@@ -31,6 +44,12 @@ public class AccountRepositoryImpl implements AccountRepository {
         }
     }
 
+    /**
+     * Atualiza uma conta existente no banco de dados.
+     *
+     * @param account A conta a ser atualizada
+     * @return A conta atualizada
+     */
     @Override
     public void update(Account account) {
         String sql = "UPDATE Account SET totalBalance = ? WHERE code = ?";
@@ -45,6 +64,11 @@ public class AccountRepositoryImpl implements AccountRepository {
         }
     }
 
+    /**
+     * Exclui uma conta do banco de dados.
+     *
+     * @param id O código da conta
+     */
     @Override
     public void delete(Long id) {
         String sql = "DELETE FROM Account WHERE code = ?";
@@ -57,6 +81,12 @@ public class AccountRepositoryImpl implements AccountRepository {
         }
     }
 
+    /**
+     * Busca uma conta pelo seu código.
+     *
+     * @param id O código da conta
+     * @return A conta encontrada, ou null se não existir
+     */
     @Override
     public Account findById(Long id) {
         String sql = "SELECT * FROM Account WHERE code = ?";
@@ -74,6 +104,12 @@ public class AccountRepositoryImpl implements AccountRepository {
         return null;
     }
 
+    /**
+     * Busca todas as contas associadas a um usuário pelo seu e-mail.
+     *
+     * @param userEmail O e-mail do usuário
+     * @return Uma lista de contas associadas ao usuário
+     */
     @Override
     public List<Account> findByUserEmail(String userEmail) {
         List<Account> accounts = new ArrayList<>();

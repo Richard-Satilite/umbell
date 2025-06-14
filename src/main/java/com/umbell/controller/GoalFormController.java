@@ -13,7 +13,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.function.Consumer;
-
+/**
+ * Controlador responsável pelo formulário de criação e edição de metas.
+ * Gerencia a interface de entrada de dados para criar ou editar uma meta financeira.
+ * 
+ * @author Richard Satilite
+ */
 public class GoalFormController {
 
     @FXML
@@ -29,12 +34,20 @@ public class GoalFormController {
     private AccountService accountService;
     private Consumer<Void> onGoalCreated;
 
+    /**
+     * Inicializa o controlador e configura as validações dos campos.
+     */
     @FXML
     public void initialize() {
         goalService = new GoalService();
         accountService = new AccountService();
     }
 
+    /**
+     * Define o usuário atual.
+     * 
+     * @param user O usuário que está criando/editando a meta
+     */
     public void setUser(User user) {
         this.user = user;
     }
@@ -43,10 +56,19 @@ public class GoalFormController {
         this.account = account;
     }
 
+    /**
+     * Define o callback a ser executado após a criação da meta.
+     * 
+     * @param callback O callback a ser executado
+     */
     public void setOnGoalCreated(Consumer<Void> onGoalCreated) {
         this.onGoalCreated = onGoalCreated;
     }
 
+    /**
+     * Manipula o evento de clique no botão de salvar.
+     * Valida os campos e salva a meta.
+     */
     @FXML
     private void onCreateGoalClick() {
         String title = titleField.getText();
@@ -89,6 +111,9 @@ public class GoalFormController {
         }
     }
 
+    /**
+     * Fecha a janela atual.
+     */
     @FXML
     private void onCancelClick() {
         Stage stage = (Stage) titleField.getScene().getWindow();

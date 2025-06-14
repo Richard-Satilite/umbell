@@ -12,6 +12,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+/**
+ * Controlador responsável pela criação de novas contas.
+ * Gerencia a interface de entrada do nome da conta e sua criação.
+ * 
+ * @author Richard Satilite
+ */
 public class AccountNameController {
     
     @FXML
@@ -23,11 +29,21 @@ public class AccountNameController {
     private User user;
     private final AccountService accountService = new AccountService();
     
+    /**
+     * Define o usuário atual que está criando a conta.
+     * 
+     * @param user O usuário que está criando a conta
+     */
     public void setUser(User user) {
         this.user = user;
         System.out.println("AccountNameController: Usuário definido como: " + (user != null ? user.getEmail() : "null"));
     }
     
+    /**
+     * Manipula o evento de clique no botão de criar conta.
+     * Cria uma nova conta com o nome fornecido e associa ao usuário atual.
+     * Após a criação, fecha a janela atual e abre o dashboard.
+     */
     @FXML
     private void onCreateAccountClick() {
         System.out.println("onCreateAccountClick: Botão 'Criar Conta' clicado.");
@@ -50,8 +66,6 @@ public class AccountNameController {
         Account account = new Account();
         account.setUserEmail(user.getEmail());
         account.setName(accountName);
-        // Aqui você pode adicionar o nome da conta como um campo extra, se desejar
-        // account.setName(accountName);
         
         System.out.println("onCreateAccountClick: Tentando registrar a conta para o email: " + user.getEmail());
         try {

@@ -8,8 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementação da interface UserRepository.
+ * Esta classe fornece a implementação concreta dos métodos definidos na interface UserRepository,
+ * realizando operações de persistência para usuários no banco de dados.
+ *
+ * @author Richard Satilite
+ */
 public class UserRepositoryImpl implements UserRepository {
 
+    /**
+     * Salva um novo usuário.
+     *
+     * @param user o usuário a ser salvo
+     * @return o usuário salvo com seu código gerado
+     */
     @Override
     public User save(User user) {
         String sql = "INSERT INTO User (name, email, password_hash) VALUES (?, ?, ?)";
@@ -32,6 +45,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Atualiza um usuário existente.
+     *
+     * @param user o usuário com os dados atualizados
+     * @return o usuário atualizado
+     */
     @Override
     public User update(User user) {
         String sql = "UPDATE User SET name = ?, email = ?, password_hash = ? WHERE id = ?";
@@ -49,6 +68,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Remove um usuário com base no ID.
+     *
+     * @param id o identificador do usuário a ser removido
+     * @return true se o usuário foi removido com sucesso, false caso contrário
+     */
     @Override
     public boolean delete(Long id) {
         String sql = "DELETE FROM User WHERE id = ?";
@@ -62,6 +87,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Busca um usuário pelo seu ID.
+     *
+     * @param id o identificador do usuário
+     * @return o usuário correspondente, ou {@code Optional.empty()} se não encontrado
+     */
     @Override
     public Optional<User> findById(Long id) {
         String sql = "SELECT * FROM User WHERE id = ?";
@@ -79,6 +110,12 @@ public class UserRepositoryImpl implements UserRepository {
         return Optional.empty();
     }
 
+    /**
+     * Busca um usuário pelo seu e-mail.
+     *
+     * @param email o e-mail do usuário
+     * @return o usuário correspondente, ou {@code Optional.empty()} se não encontrado
+     */
     @Override
     public Optional<User> findByEmail(String email) {
         String sql = "SELECT * FROM User WHERE email = ?";
@@ -96,6 +133,11 @@ public class UserRepositoryImpl implements UserRepository {
         return Optional.empty();
     }
 
+    /**
+     * Retorna todos os usuários cadastrados.
+     *
+     * @return uma lista com todos os usuários
+     */
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
@@ -113,27 +155,13 @@ public class UserRepositoryImpl implements UserRepository {
         return users;
     }
 
-    @Override
-    public boolean existsByEmail(String email) {
-        String sql = "SELECT COUNT(*) FROM User WHERE email = ?";
-        
-        try (Connection conn = DatabaseUtil.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, email);
-            
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
-            }
-            
-            return false;
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao verificar existência de email", e);
-        }
-    }
-
+    /**
+     * Converte um ResultSet em um objeto User.
+     *
+     * @param rs O ResultSet contendo os dados do usuário
+     * @return Um objeto User preenchido com os dados do ResultSet
+     * @throws SQLException Se ocorrer um erro ao acessar os dados do ResultSet
+     */
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setId(rs.getLong("id"));
@@ -143,6 +171,12 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
+    /**
+     * Carrega todas as contas associadas a um usuário.
+     *
+     * @param userEmail o e-mail do usuário
+     * @return uma lista com todas as contas do usuário
+     */
     @Override
     public List<Account> loadUserAccounts(String userEmail) {
         String sql = "SELECT * FROM Account WHERE user_email = ?";
@@ -168,6 +202,33 @@ public class UserRepositoryImpl implements UserRepository {
             return accounts;
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao carregar contas do usuário", e);
+        }
+    }
+
+    /**
+     * Verifica se existe um usuário com o e-mail informado.
+     *
+     * @param email o e-mail a ser verificado
+     * @return true se o e-mail já está em uso, false caso contrário
+     */
+    @Override
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM User WHERE email = ?";
+        
+        try (Connection conn = DatabaseUtil.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, email);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+            
+            return false;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar existência de email", e);
         }
     }
 } 
